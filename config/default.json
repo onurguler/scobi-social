@@ -1,0 +1,3 @@
+{
+  "mongoURI": "mongodb+srv://scobiadmin:admin123@scobidb-un8ss.mongodb.net/test?retryWrites=true&w=majority"
+}
