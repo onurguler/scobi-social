@@ -1,8 +1,11 @@
 const express = require('express');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
-const router = express.Router();
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const { check, validationResult } = require('express-validator');
+
+const router = express.Router();
 
 const User = require('../../models/User');
 
@@ -44,10 +47,13 @@ router.post(
 
       await user.save();
 
-      // return jsonwebtoken
-      // TODO: use passport.js
+      const payload = {
+        user: { id: user.id }
+      };
 
-      return res.json('User registered.');
+      const token = jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
+
+      return res.json({ token });
     } catch (err) {
       console.log(err.message);
       res.status(500).send('Server Error');

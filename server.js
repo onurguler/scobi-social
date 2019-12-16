@@ -1,6 +1,8 @@
 const express = require('express');
 const connectDB = require('./config/db');
 
+require('./config/passport');
+
 const app = express();
 
 connectDB();
