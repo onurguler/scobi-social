@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Home from './components/home/Home';
 import Login from './components/auth/Login';
@@ -16,33 +16,48 @@ import Footer from './components/layout/Footer';
 import AboutUs from './components/contact/AboutUs';
 import Comments from './components/post/Comments';
 
+// Redux
+import { Provider } from 'react-redux';
+import store from './store/store';
+import { loadUser } from './store/actions/auth';
+import setAuthToken from './utils/setAuthToken';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+
 const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
   return (
-    <Router>
-      <div className="font-sans antialiased text-gray-900">
-        <Navbar isAuthenticated={false} />
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/2FA" component={TwoFA} />
-          <Route exact path="/register" component={Signup} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/topic" component={Topic} />
-          <Route exact path="/profile/edit" component={ProfileEdit} />
-          <Route exact path="/profile/edit/:option" component={ProfileEdit} />
-          <Route exact path="/topic/:topic_name" component={Topic} />
-          <Route exact path="/profile/edit" component={ProfileEdit} />
-          <Route exact path="/profile/edit/:option" component={ProfileEdit} />
-          <Route exact path="/posts/new" component={NewPost} />
-          <Route exact path="/settings" component={Settings} />
-          <Route exact path="/contact" component={Contact} />
-          <Route exact path="/posts" component={Post} />
-          <Route exact path="/AboutUs" component={AboutUs} />
-          <Route exact path="/posts/:post_id/comments" component={Comments} />
-        </Switch>
-        <Footer />
-      </div>
-    </Router>
+    <Provider store={store}>
+      <Router>
+        <div className="font-sans antialiased text-gray-900">
+          <Navbar isAuthenticated={false} />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/2FA" component={TwoFA} />
+            <Route exact path="/register" component={Signup} />
+            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/topic" component={Topic} />
+            <Route exact path="/profile/edit" component={ProfileEdit} />
+            <Route exact path="/profile/edit/:option" component={ProfileEdit} />
+            <Route exact path="/topic/:topic_name" component={Topic} />
+            <Route exact path="/profile/edit" component={ProfileEdit} />
+            <Route exact path="/profile/edit/:option" component={ProfileEdit} />
+            <Route exact path="/posts/new" component={NewPost} />
+            <Route exact path="/settings" component={Settings} />
+            <Route exact path="/contact" component={Contact} />
+            <Route exact path="/posts" component={Post} />
+            <Route exact path="/AboutUs" component={AboutUs} />
+            <Route exact path="/posts/:post_id/comments" component={Comments} />
+          </Switch>
+          <Footer />
+        </div>
+      </Router>
+    </Provider>
   );
 };
 

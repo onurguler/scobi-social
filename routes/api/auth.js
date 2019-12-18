@@ -13,7 +13,15 @@ const auth = require('../../middleware/auth');
 // @route   GET api/auth
 // @desc    Test route
 // @access  Public
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) => res.send(req.user));
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    return res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 // @route   POST api/auth
 // @desc    Authenticate user & return token

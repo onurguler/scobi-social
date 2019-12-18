@@ -1,9 +1,18 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Trending from './Trending';
 import PopularTopics from './PopularTopics';
 import CategoriesList from './CategoriesList';
+import queryString from 'query-string';
 
-const Home = () => {
+const Home = ({ location, history }) => {
+  useEffect(() => {
+    var query = queryString.parse(location.search);
+    if (query.token) {
+      localStorage.setItem('token', query.token);
+      history.push('/');
+    }
+  }, [location, history]);
+
   return (
     <Fragment>
       <div className="container pt-3">
