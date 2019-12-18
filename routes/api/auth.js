@@ -75,7 +75,6 @@ router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
   async (req, res) => {
-    // Successful authentication redirect client home page with token
     // @TODO: Redirect react client home page
 
     const payload = {
