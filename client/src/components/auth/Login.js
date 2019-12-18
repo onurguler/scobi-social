@@ -1,16 +1,18 @@
 import React, { Fragment, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import { Row, Col, Image, Form, Button, FormGroup } from 'react-bootstrap';
 import { faFacebook, faGooglePlus } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import signin from '../../assets/img/signin.jpg';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { login } from '../../store/actions/auth';
 
-const Login = () => {
+const Login = ({ isAuthenticated, login }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const { email, password } = formData;
 
@@ -19,13 +21,10 @@ const Login = () => {
 
   const onSubmit = e => {
     e.preventDefault();
-
-    console.log(email, password);
-
-    setIsAuthenticated(true);
+    login(email, password);
   };
 
-  if (isAuthenticated) return <Redirect to="/2FA" />;
+  if (isAuthenticated) return <Redirect to="/" />;
 
   return (
     <Fragment>
@@ -86,7 +85,11 @@ const Login = () => {
             </Button>
 
             <Button id="google" variant="default">
-              <FontAwesomeIcon icon={faGooglePlus} size="2x" />
+              <a
+                className="text-decoration-none"
+                href="http://localhost:5000/api/auth/google">
+                <FontAwesomeIcon icon={faGooglePlus} size="2x" />
+              </a>
             </Button>
           </Form>
         </Col>
@@ -95,4 +98,14 @@ const Login = () => {
   );
 };
 
-export default Login;
+Login.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => {
+  const { auth } = state;
+
+  return { isAuthenticated: auth.isAuthenticated };
+};
+
+export default connect(mapStateToProps, { login })(Login);

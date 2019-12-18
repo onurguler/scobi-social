@@ -83,7 +83,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/login' }),
   async (req, res) => {
-    // @TODO: Redirect react client home page
+    // @TODO: Redirect domain react client home page
 
     const payload = {
       user: { id: req.user.id }
@@ -91,7 +91,7 @@ router.get(
 
     const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
 
-    return res.redirect('https://localhost:5000?token=' + token);
+    return res.redirect('http://localhost:3000?token=' + token);
   }
 );
 
