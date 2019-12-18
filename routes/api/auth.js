@@ -55,7 +55,9 @@ router.post(
         user: { id: user.id }
       };
 
-      const token = jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
+      const token = jwt.sign(payload, config.get('jwtSecret'), {
+        expiresIn: 360000
+      });
 
       return res.json({ token });
     } catch (err) {
@@ -81,7 +83,10 @@ router.get(
 // @TODO: failure redirect react client login page
 router.get(
   '/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  passport.authenticate('google', {
+    session: false,
+    failureRedirect: '/login'
+  }),
   async (req, res) => {
     // @TODO: Redirect domain react client home page
 
@@ -89,10 +94,45 @@ router.get(
       user: { id: req.user.id }
     };
 
-    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
+    const token = await jwt.sign(payload, config.get('jwtSecret'), {
+      expiresIn: 360000
+    });
 
     return res.redirect('http://localhost:3000?token=' + token);
   }
 );
 
+// @route   GET api/auth/google
+// @desc    Authencitation user with google
+// @access  Public
+router.get(
+  '/facebook',
+  passport.authenticate('facebook', {
+    scope: ['email']
+  })
+);
+
+// @route   GET api/auth/facebook
+// @desc    Authencitation user with facebook
+// @access  Public
+router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook', {
+    session: false,
+    failureRedirect: '/login'
+  }),
+  async (req, res) => {
+    // @TODO: Redirect react client home page
+
+    const payload = {
+      user: { id: req.user.id }
+    };
+
+    const token = await jwt.sign(payload, config.get('jwtSecret'), {
+      expiresIn: 360000
+    });
+
+    return res.redirect('http://localhost:3000?token=' + token);
+  }
+);
 module.exports = router;
