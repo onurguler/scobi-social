@@ -70,14 +70,22 @@ router.get(
 // @route   GET api/auth/google/callback
 // @desc    Authentication user with google and return token
 // @access  Public
-router.get('/google/callback', passport.authenticate('google', { session: false, failureRedirect: '/login' }), function(
-  req,
-  res
-) {
-  // Successful authentication redirect client home page with token
-  // @TODO: Redirect react client home page
+// @TODO: failure redirect react client login page
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+  async (req, res) => {
+    // Successful authentication redirect client home page with token
+    // @TODO: Redirect react client home page
 
-  res.redirect('https://localhost:5000?token=' + req.user.token);
-});
+    const payload = {
+      user: { id: req.user.id }
+    };
+
+    const token = await jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
+
+    return res.redirect('https://localhost:5000?token=' + token);
+  }
+);
 
 module.exports = router;

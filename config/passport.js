@@ -74,16 +74,8 @@ passport.use(
 
       try {
         let user = await User.findOneAndUpdate({ $or: [{ googleId }, { email }] }, { googleId });
-        let payload, token;
 
-        if (user !== null) {
-          payload = {
-            user: { id: user.id }
-          };
-
-          token = jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
-          return cb((err = null), { token });
-        }
+        if (user !== null) return cb((err = null), user);
 
         const name = profile.displayName;
         const avatar = profile.photos[0].value;
@@ -97,12 +89,7 @@ passport.use(
 
         await user.save();
 
-        payload = {
-          user: { id: user.id }
-        };
-
-        token = jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 });
-        return cb((err = null), { token });
+        return cb((err = null), user);
       } catch (err) {
         console.log(err.message);
         return cb(err, (user = null));
