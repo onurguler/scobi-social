@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-const AuthAccountDropdown = () => {
+const AuthAccountDropdown = ({ avatar, name }) => {
   return (
     <Fragment>
       <div className="dropdown">
@@ -10,7 +12,7 @@ const AuthAccountDropdown = () => {
           data-toggle="dropdown">
           <img
             className="fit-image rounded-circle"
-            src="https://images.unsplash.com/photo-1506919258185-6078bba55d2a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1115&q=80"
+            src={avatar}
             alt="account"
             width="32"
             height="32"
@@ -23,13 +25,13 @@ const AuthAccountDropdown = () => {
             <div className="d-flex">
               <img
                 className="rounded-circle fit-image"
-                src="https://images.unsplash.com/photo-1506919258185-6078bba55d2a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1115&q=80"
+                src={avatar}
                 width="50"
                 height="50"
                 alt=""
               />
               <div className="ml-3">
-                <div className="font-weight-bold">John Doe</div>
+                <div className="font-weight-bold">{name}</div>
                 <div>
                   <small className="text-secondary">@johndoe</small>
                 </div>
@@ -63,4 +65,15 @@ const AuthAccountDropdown = () => {
   );
 };
 
-export default AuthAccountDropdown;
+AuthAccountDropdown.propTypes = {
+  name: PropTypes.string.isRequired,
+  avatar: PropTypes.string.isRequired
+};
+
+const mapStateToProps = state => {
+  const { auth } = state;
+
+  return { avatar: auth.user.avatar, name: auth.user.name };
+};
+
+export default connect(mapStateToProps, null)(AuthAccountDropdown);

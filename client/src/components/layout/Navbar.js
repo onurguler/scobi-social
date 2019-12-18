@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import SearchMobile from './SearchMobile';
 import GuestItems from './GuestItems';
 import AuthItems from './AuthItems';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 const NavBar = ({ isAuthenticated }) => {
   return (
@@ -35,4 +37,14 @@ const NavBar = ({ isAuthenticated }) => {
   );
 };
 
-export default NavBar;
+NavBar.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => {
+  const { auth } = state;
+
+  return { isAuthenticated: auth.isAuthenticated };
+};
+
+export default connect(mapStateToProps, null)(NavBar);
