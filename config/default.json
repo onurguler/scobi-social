@@ -1,4 +1,6 @@
 {
   "mongoURI": "mongodb+srv://scobiadmin:admin123@scobidb-un8ss.mongodb.net/test?retryWrites=true&w=majority",
-  "jwtSecret": "Secret jwt key"
+  "jwtSecret": "Secret jwt key",
+  "GOOGLE_CLIENT_ID": "40685429500-et94vle6tubgjsq8n0on1khj4uo4dh1c.apps.googleusercontent.com",
+  "GOOGLE_CLIENT_SECRET": "0CcyWAZr-xRullpTynmsRrOe"
 }
