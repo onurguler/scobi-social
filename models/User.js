@@ -1,20 +1,18 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({
   googleId: { type: String },
+  facebookId: {
+    type: String
+  },
   name: {
     type: String,
     required: true
   },
-<<<<<<< HEAD
   username: {
     type: String,
     required: true,
     unique: true
-=======
-  facebookId: {
-    type: String
->>>>>>> origin/egeckmk
   },
   email: {
     type: String,
@@ -34,4 +32,4 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-module.exports = User = mongoose.model("user", UserSchema);
+module.exports = User = mongoose.model('user', UserSchema);
