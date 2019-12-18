@@ -10,7 +10,6 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const config = require('config');
 const generator = require('generate-password');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
