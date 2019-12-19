@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 const router = express.Router();
 
 const User = require('../../models/User');
+const Profile = require('../../models/Profile');
 const { generateUniqueUsername } = require('../../utils/utils');
 
 // @route   POST api/users
@@ -54,6 +55,12 @@ router.post(
       const salt = await bcrypt.genSalt(10);
 
       user.password = await bcrypt.hash(password, salt);
+
+      const profile = new Profile({
+        user: user.id
+      });
+
+      await profile.save();
 
       await user.save();
 

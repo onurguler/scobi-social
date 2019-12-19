@@ -22,7 +22,7 @@ const AuthAccountDropdown = ({ avatar, name, username, logout }) => {
         <div
           className="dropdown-menu font-weight-bolder dropdown-menu-right"
           style={{ minWidth: '15rem' }}>
-          <Link className="dropdown-item" to="/profile">
+          <Link className="dropdown-item" to={`/@${username}`}>
             <div className="d-flex">
               <img
                 className="rounded-circle fit-image"
@@ -51,7 +51,7 @@ const AuthAccountDropdown = ({ avatar, name, username, logout }) => {
             Bookmarks
           </Link>
           <div class="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/profile">
+          <Link className="dropdown-item" to={`/@${username}`}>
             Profile
           </Link>
           <Link className="dropdown-item" to="/settings">

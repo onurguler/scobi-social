@@ -13,6 +13,7 @@ const generator = require('generate-password');
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/User');
+const Profile = require('../models/Profile');
 const { generateUniqueUsername } = require('../utils/utils');
 
 passport.use(
@@ -96,6 +97,12 @@ passport.use(
         const salt = await bcrypt.genSalt(10);
 
         user.password = await bcrypt.hash(password, salt);
+
+        const profileDb = new Profile({
+          user: user.id
+        });
+
+        await profileDb.save();
 
         await user.save();
 
