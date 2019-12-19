@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const ProfileSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: "user"
   },
   website: {
     type: String
@@ -36,14 +36,18 @@ const ProfileSchema = new mongoose.Schema({
   },
   followers: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user'
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }
     }
   ],
   following: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'user'
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "user"
+      }
     }
   ],
   date: {
@@ -52,4 +56,4 @@ const ProfileSchema = new mongoose.Schema({
   }
 });
 
-module.exports = Profile = mongoose.model('profile', ProfileSchema);
+module.exports = Profile = mongoose.model("profile", ProfileSchema);
