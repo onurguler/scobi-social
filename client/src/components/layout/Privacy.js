@@ -48,9 +48,7 @@ const Privacy = () => {
           </p>{' '}
           <ul>
             <li>
-              <a
-                href="https://www.google.com/policies/privacy/"
-                target="_blank">
+              <a href="https://www.google.com/policies/privacy/" target="blank">
                 Google Play Services
               </a>
             </li>
