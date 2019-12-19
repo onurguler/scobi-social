@@ -98,7 +98,7 @@ router.get(
     failureRedirect: "/login"
   }),
   async (req, res) => {
-    // @TODO: Redirect react client home page
+    // @TODO: Redirect domain react client home page
 
     const payload = {
       user: { id: req.user.id }
@@ -108,7 +108,7 @@ router.get(
       expiresIn: 360000
     });
 
-    return res.redirect("https://localhost:3000?token=" + token);
+    return res.redirect("http://localhost:3000?token=" + token);
   }
 );
 
