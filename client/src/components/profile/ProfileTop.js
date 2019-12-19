@@ -1,11 +1,16 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import FollowersModal from './FollowersModal';
 
 const ProfileTop = ({ profile, user, loading }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalData, setModalData] = useState([]);
+
   return (
     <Fragment>
       <div className="bg-teal-700 mb-4 mw-100">
@@ -43,11 +48,23 @@ const ProfileTop = ({ profile, user, loading }) => {
                   <div className="font-bold">14</div>
                   <small className="text-gray-300">Posts</small>
                 </div>
-                <div className="px-4 py-2 border-right border-gray-300">
+                <div
+                  className="px-4 py-2 border-right border-gray-300"
+                  onClick={() => {
+                    setModalTitle('Followers');
+                    setModalData(profile.followers);
+                    setShowModal(true);
+                  }}>
                   <div className="font-bold">{profile.followers.length}</div>
                   <small className="text-gray-300">Followers</small>
                 </div>
-                <div className="px-4 py-2">
+                <div
+                  className="px-4 py-2"
+                  onClick={() => {
+                    setModalTitle('Following');
+                    setModalData(profile.following);
+                    setShowModal(true);
+                  }}>
                   <div className="font-bold">{profile.following.length}</div>
                   <small className="text-gray-300">Following</small>
                 </div>
@@ -62,6 +79,13 @@ const ProfileTop = ({ profile, user, loading }) => {
           )}
         </div>
       </div>
+
+      <FollowersModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        title={modalTitle}
+        data={modalData}
+      />
     </Fragment>
   );
 };
