@@ -142,7 +142,7 @@ router.get(
       expiresIn: 360000
     });
 
-    return res.redirect("https://localhost:3000?token=" + token);
+    return res.redirect("http://localhost:3000?token=" + token);
   }
 );
 module.exports = router;

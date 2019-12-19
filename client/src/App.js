@@ -15,6 +15,7 @@ import Post from './components/post/Post';
 import Footer from './components/layout/Footer';
 import AboutUs from './components/contact/AboutUs';
 import Comments from './components/post/Comments';
+import Privacy from './components/layout/Privacy';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -40,7 +41,7 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/2FA" component={TwoFA} />
             <Route exact path="/register" component={Signup} />
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/@:username" component={Profile} />
             <Route exact path="/topic" component={Topic} />
             <Route exact path="/profile/edit" component={ProfileEdit} />
             <Route exact path="/profile/edit/:option" component={ProfileEdit} />
@@ -53,6 +54,7 @@ const App = () => {
             <Route exact path="/posts" component={Post} />
             <Route exact path="/AboutUs" component={AboutUs} />
             <Route exact path="/posts/:post_id/comments" component={Comments} />
+            <Route exact path="/privacy" component={Privacy} />
           </Switch>
           <Footer />
         </div>
