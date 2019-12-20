@@ -8,7 +8,8 @@ import {
   ADD_POST,
   GET_POST,
   ADD_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_COMMENT,
+  UPDATE_DISLIKES
 } from './types';
 
 // Get posts
@@ -69,6 +70,40 @@ export const removeLike = id => async dispatch => {
     dispatch({
       type: UPDATE_LIKES,
       payload: { id, likes: res.data }
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Add like
+export const addDislike = id => async dispatch => {
+  try {
+    const res = await axios.put(`/api/posts/dislike/${id}`);
+
+    dispatch({
+      type: UPDATE_DISLIKES,
+      payload: { id, dislikes: res.data }
+    });
+  } catch (err) {
+    dispatch({
+      type: POST_ERROR,
+      payload: { msg: err.response.statusText, status: err.response.status }
+    });
+  }
+};
+
+// Remove like
+export const removeDislike = id => async dispatch => {
+  try {
+    const res = await axios.put(`/api/posts/undislike/${id}`);
+
+    dispatch({
+      type: UPDATE_DISLIKES,
+      payload: { id, dislikes: res.data }
     });
   } catch (err) {
     dispatch({

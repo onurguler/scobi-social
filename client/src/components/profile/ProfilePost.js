@@ -18,8 +18,22 @@ import {
   faBookmark
 } from '@fortawesome/free-regular-svg-icons';
 import LikesModal from '../post/LikesModal';
+import { connect } from 'react-redux';
+import {
+  addLike,
+  removeLike,
+  addDislike,
+  removeDislike
+} from '../../store/actions/post';
 
-const ProfilePost = ({ post }) => {
+const ProfilePost = ({
+  post,
+  addLike,
+  auth,
+  removeLike,
+  addDislike,
+  removeDislike
+}) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
 
   return (
@@ -106,20 +120,48 @@ const ProfilePost = ({ post }) => {
 
         <div className="mt-2 d-flex justify-content-between">
           <div>
-            <a className="text-decoration-none text-secondary" href="#!">
-              <FontAwesomeIcon icon={faThumbsUp} />
-            </a>
+            {!auth.loading &&
+            post.likes.filter(like => like.user === auth.user._id).length >
+              0 ? (
+              <button
+                className="btn text-secondary"
+                href="#!"
+                onClick={() => removeLike(post._id)}>
+                <FontAwesomeIcon icon={faThumbsUpSolid} />
+              </button>
+            ) : (
+              <button
+                className="btn text-secondary"
+                href="#!"
+                onClick={() => addLike(post._id)}>
+                <FontAwesomeIcon icon={faThumbsUp} />
+              </button>
+            )}
             <a className="text-decoration-none text-secondary" href="#!">
               <small className="ml-2" onClick={() => setShowLikesModal(true)}>
-                242
+                {post.likes.length}
               </small>
             </a>
 
-            <a className="text-decoration-none text-secondary ml-4" href="#!">
-              <FontAwesomeIcon className="align-middle" icon={faThumbsDown} />
-            </a>
+            {!auth.loading &&
+            post.dislikes.filter(dislike => dislike.user === auth.user._id)
+              .length > 0 ? (
+              <button
+                className="btn text-secondary"
+                href="#!"
+                onClick={() => removeDislike(post._id)}>
+                <FontAwesomeIcon icon={faThumbsDownSolid} />
+              </button>
+            ) : (
+              <button
+                className="btn text-secondary"
+                href="#!"
+                onClick={() => addDislike(post._id)}>
+                <FontAwesomeIcon icon={faThumbsDown} />
+              </button>
+            )}
             <a className="text-decoration-none text-secondary" href="#!">
-              <small className="ml-2">13</small>
+              <small className="ml-2">{post.dislikes.length}</small>
             </a>
             <a className="text-decoration-none text-secondary ml-4" href="#!">
               <FontAwesomeIcon className="align-middle" icon={faEye} />
@@ -147,4 +189,14 @@ const ProfilePost = ({ post }) => {
   );
 };
 
-export default ProfilePost;
+const mapStateToProps = state => {
+  const { auth } = state;
+  return { auth };
+};
+
+export default connect(mapStateToProps, {
+  addLike,
+  removeLike,
+  addDislike,
+  removeDislike
+})(ProfilePost);
