@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FollowersModal from './FollowersModal';
 
-const ProfileTop = ({ profile, user, loading }) => {
+const ProfileTop = ({ profile, user, loading, posts }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalData, setModalData] = useState([]);
@@ -28,14 +28,14 @@ const ProfileTop = ({ profile, user, loading }) => {
               <div className="d-flex justify-content-between mb-3 align-items-center">
                 <span className="lead font-weight-bold text-center align-middle text-gray-100">
                   {profile.user.name}
-                  {!loading && profile.user.username === user.username && (
+                  {!loading && user && profile.user.username === user.username && (
                     <Link className="text-gray-100" to="/profile/edit/overview">
                       <FontAwesomeIcon className="ml-2" icon={faEdit} />
                     </Link>
                   )}
                 </span>
 
-                {!loading && profile.user.username !== user.username && (
+                {!loading && user && profile.user.username !== user.username && (
                   <button
                     type="button"
                     class="btn btn-outline-light btn-sm px-4">
@@ -45,7 +45,7 @@ const ProfileTop = ({ profile, user, loading }) => {
               </div>
               <div className="d-flex flex-row text-center justify-content-center text-gray-100">
                 <div className="px-4 py-2 border-right border-gray-300">
-                  <div className="font-bold">14</div>
+                  <div className="font-bold">{posts.length}</div>
                   <small className="text-gray-300">Posts</small>
                 </div>
                 <div

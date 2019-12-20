@@ -40,7 +40,7 @@ const AuthAccountDropdown = ({ avatar, name, username, logout }) => {
             </div>
           </Link>
           <div class="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/posts/new">
+          <Link className="dropdown-item" to="/new-post">
             New post
           </Link>
           <Link className="dropdown-item" to="/profile">

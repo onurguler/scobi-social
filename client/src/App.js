@@ -48,7 +48,7 @@ const App = () => {
             <Route exact path="/topic/:topic_name" component={Topic} />
             <Route exact path="/profile/edit" component={ProfileEdit} />
             <Route exact path="/profile/edit/:option" component={ProfileEdit} />
-            <Route exact path="/posts/new" component={NewPost} />
+            <Route exact path="/new-post" component={NewPost} />
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/contact" component={Contact} />
             <Route exact path="/posts" component={Post} />
