@@ -30,7 +30,7 @@ const Profile = ({
   const [showBookmarks, setShowBookmarks] = useState(false);
 
   return (
-    <div className="flex d-flex flex-column align-items-center justify-content-center profile">
+    <div className="flex d-flex flex-column align-items-center profile min-vh-100">
       {!profile.loading && !post.loading && (
         <ProfileTop profile={profile.profile} posts={post.posts} />
       )}
