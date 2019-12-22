@@ -7,7 +7,7 @@ const TopicCard = ({ post }) => {
       <div class="row no-gutters">
         <div class="col-2 col-md-4">
           {post.cover && (
-            <Link to="/posts">
+            <Link to={`/posts/${post._id}`}>
               <img
                 src={post.cover}
                 class="card-img fit-image rounded-0"
@@ -20,12 +20,16 @@ const TopicCard = ({ post }) => {
         </div>
         <div class="col-10  col-md-8">
           <div class="card-body d-flex flex-column">
-            <Link to="/posts" className="text-decoration-none text-gray-900">
+            <Link
+              to={`/posts/${post._id}`}
+              className="text-decoration-none text-gray-900">
               <h5 class="card-title truncate-2-lines">{post.title}</h5>
             </Link>
 
             {post.subtitle && (
-              <Link to="/posts" className="text-decoration-none text-gray-700">
+              <Link
+                to={`/posts/${post._id}`}
+                className="text-decoration-none text-gray-700">
                 <p class="card-text font-smaller truncate-2-lines">
                   {post.subtitle}
                 </p>

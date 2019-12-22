@@ -1,11 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const PostHeader = () => {
-  return (
-    <h2>
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aut, quis?
-    </h2>
-  );
+const PostHeader = ({ post }) => {
+  return <h2>{post.post.title}</h2>;
 };
 
 export default PostHeader;

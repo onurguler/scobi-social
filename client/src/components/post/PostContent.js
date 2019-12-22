@@ -18,60 +18,19 @@ import {
   faBookmark
 } from '@fortawesome/free-regular-svg-icons';
 import LikesModal from './LikesModal';
+import { Markdown } from 'react-showdown';
 
-const PostContent = ({ className }) => {
+const PostContent = ({ className, post }) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
 
   return (
     <div className={`${className}`}>
-      <img
-        className="w-100 img-fluid mb-4"
-        src="https://images.unsplash.com/photo-1558981420-c532902e58b4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-        alt=""
-      />
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quod
-        quis tempora exercitationem voluptas voluptatum iste earum minus. Odio,
-        ea?
-      </p>
+      <h4>{post && post.subtitle}</h4>
+      {post && post.cover && (
+        <img className="w-100 img-fluid mb-4" src={post.cover} alt="" />
+      )}
 
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente quod
-        quis tempora exercitationem voluptas voluptatum iste earum minus. Odio,
-        ea?
-      </p>
-
-      <p>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ad aliquid
-        voluptatibus sunt, repellat dicta sint voluptatem voluptates quae ex
-        labore ducimus cupiditate illum quos distinctio dolor magnam iusto magni
-        omnis dolorum. Facilis vitae et voluptatem cupiditate alias placeat
-        autem suscipit. Modi blanditiis, iusto quo repellat adipisci qui omnis
-        at iste.
-      </p>
-
-      <h3>Lorem, ipsum dolor.</h3>
-
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur
-        voluptatem quis assumenda nisi mollitia autem nulla adipisci? Quasi,
-        nostrum voluptatum!
-      </p>
-
-      <img
-        className="w-100 img-fluid mb-4"
-        src="https://images.unsplash.com/photo-1574192773018-be32f27632d3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
-        alt=""
-      />
-
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-        accusantium assumenda a at. Accusamus dolores vitae eum placeat maxime
-        libero laborum perferendis est, natus ea numquam rem odit mollitia
-        facilis sunt nemo. Perspiciatis minus dignissimos nulla aliquam modi
-        labore cupiditate laborum reiciendis, adipisci impedit officiis? Numquam
-        cum facere rem? Expedita?
-      </p>
+      <Markdown markup={post && post.text} />
 
       <div className="d-flex flex-wrap">
         <button className="btn btn-gray-300 text-gray-700 btn-sm text-sm mr-2">
