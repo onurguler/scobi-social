@@ -38,6 +38,8 @@ const PostContent = ({
   removeDislike
 }) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
+  const [likesModalData, setLikesModalData] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
 
   return (
     <div className={`${className}`}>
@@ -67,7 +69,8 @@ const PostContent = ({
         <div>
           {!auth.loading &&
           post &&
-          post.likes.filter(like => like.user === auth.user._id).length > 0 ? (
+          post.likes.filter(like => like.user._id === auth.user._id).length >
+            0 ? (
             <button
               className="btn text-secondary"
               href="#!"
@@ -83,14 +86,20 @@ const PostContent = ({
             </button>
           )}
           <a className="text-decoration-none text-secondary" href="#!">
-            <small className="ml-2" onClick={() => setShowLikesModal(true)}>
+            <small
+              className="ml-2"
+              onClick={() => {
+                setModalTitle('Likes');
+                setLikesModalData(post.likes);
+                setShowLikesModal(true);
+              }}>
               {post && post.likes.length}
             </small>
           </a>
 
           {!auth.loading &&
           post &&
-          post.dislikes.filter(dislike => dislike.user === auth.user._id)
+          post.dislikes.filter(dislike => dislike.user._id === auth.user._id)
             .length > 0 ? (
             <button
               className="btn text-secondary"
@@ -106,7 +115,14 @@ const PostContent = ({
               <FontAwesomeIcon icon={faThumbsDown} />
             </button>
           )}
-          <a className="text-decoration-none text-secondary" href="#!">
+          <a
+            className="text-decoration-none text-secondary"
+            href="#!"
+            onClick={() => {
+              setModalTitle('Dislikes');
+              setLikesModalData(post.dislikes);
+              setShowLikesModal(true);
+            }}>
             <small className="ml-2">{post && post.dislikes.length}</small>
           </a>
           <a className="text-decoration-none text-secondary ml-4" href="#!">
@@ -184,6 +200,8 @@ const PostContent = ({
       </Link>
       <LikesModal
         show={showLikesModal}
+        title={modalTitle}
+        data={likesModalData}
         onHide={() => setShowLikesModal(false)}
       />
     </div>

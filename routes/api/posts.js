@@ -93,7 +93,9 @@ router.get("/user/:username", async (req, res) => {
 // @access   Public
 router.get("/:id", ipMiddleware, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id)
+      .populate("likes.user", ["name", "username", "avatar"])
+      .populate("dislikes.user", ["name", "username", "avatar"]);
 
     // Check for ObjectId format and post
     if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {

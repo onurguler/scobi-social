@@ -1,6 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
-function Contact() {
+function Contact({ history }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    surname: ''
+  });
+
+  const { name, surname } = formData;
+
+  const onChange = e =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const onSubmit = async e => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post('/contact', formData);
+      history.push('/');
+    } catch (error) {}
+  };
+
   return (
     <div className="min-vh-100">
       <div className="text-center mt-4">
@@ -11,7 +31,7 @@ function Contact() {
           <div class="contact-form">
             <div class="row">
               <div class="col-sm-7">
-                <form id="ajax-contact">
+                <form id="ajax-contact" onSubmit={e => onSubmit(e)}>
                   <div class="messages" id="form-messages"></div>
                   <div class="controls">
                     <div class="row">
@@ -19,6 +39,8 @@ function Contact() {
                         <div class="form-group">
                           <label for="form_name">Name *</label>
                           <input
+                            value={name}
+                            onChange={e => onChange(e)}
                             id="form_name"
                             type="text"
                             name="name"
@@ -34,6 +56,8 @@ function Contact() {
                         <div class="form-group">
                           <label for="form_lastname">Surname *</label>
                           <input
+                            value={surname}
+                            onChange={e => onChange(e)}
                             id="form_lastname"
                             type="text"
                             name="surname"
