@@ -3,7 +3,10 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
+<<<<<<< HEAD
 const speakeasy = require("speakeasy");
+=======
+>>>>>>> master
 const { check, validationResult } = require("express-validator");
 
 const router = express.Router();

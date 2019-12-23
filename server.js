@@ -1,6 +1,9 @@
 const express = require("express");
 const connectDB = require("./config/db");
+<<<<<<< HEAD
 const speakeasy = require("speakeasy");
+=======
+>>>>>>> master
 
 require("./config/passport");
 
@@ -8,6 +11,7 @@ const app = express();
 
 connectDB();
 
+app.set("trust proxy", true);
 app.use(express.json({ extended: false }));
 
 app.get("/", (req, res) => res.send("API running..." + req.user));

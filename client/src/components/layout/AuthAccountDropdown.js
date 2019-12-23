@@ -2,8 +2,9 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { logout } from '../../store/actions/auth';
 
-const AuthAccountDropdown = ({ avatar, name }) => {
+const AuthAccountDropdown = ({ avatar, name, username, logout }) => {
   return (
     <Fragment>
       <div className="dropdown">
@@ -21,7 +22,7 @@ const AuthAccountDropdown = ({ avatar, name }) => {
         <div
           className="dropdown-menu font-weight-bolder dropdown-menu-right"
           style={{ minWidth: '15rem' }}>
-          <Link className="dropdown-item" to="/profile">
+          <Link className="dropdown-item" to={`/@${username}`}>
             <div className="d-flex">
               <img
                 className="rounded-circle fit-image"
@@ -33,13 +34,13 @@ const AuthAccountDropdown = ({ avatar, name }) => {
               <div className="ml-3">
                 <div className="font-weight-bold">{name}</div>
                 <div>
-                  <small className="text-secondary">@johndoe</small>
+                  <small className="text-secondary">@{username}</small>
                 </div>
               </div>
             </div>
           </Link>
           <div class="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/posts/new">
+          <Link className="dropdown-item" to="/new-post">
             New post
           </Link>
           <Link className="dropdown-item" to="/profile">
@@ -50,15 +51,15 @@ const AuthAccountDropdown = ({ avatar, name }) => {
             Bookmarks
           </Link>
           <div class="dropdown-divider"></div>
-          <Link className="dropdown-item" to="/profile">
+          <Link className="dropdown-item" to={`/@${username}`}>
             Profile
           </Link>
           <Link className="dropdown-item" to="/settings">
             Settings
           </Link>
-          <Link className="dropdown-item" to="/signout">
+          <div onClick={logout} className="dropdown-item">
             Sign out
-          </Link>
+          </div>
         </div>
       </div>
     </Fragment>
@@ -67,13 +68,19 @@ const AuthAccountDropdown = ({ avatar, name }) => {
 
 AuthAccountDropdown.propTypes = {
   name: PropTypes.string.isRequired,
-  avatar: PropTypes.string.isRequired
+  avatar: PropTypes.string.isRequired,
+  logout: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => {
   const { auth } = state;
 
-  return { avatar: auth.user.avatar, name: auth.user.name };
+  return {
+    avatar: auth.user.avatar,
+    name: auth.user.name,
+    username: auth.user.username
+  };
 };
 
-export default connect(mapStateToProps, null)(AuthAccountDropdown);
+export default connect(mapStateToProps, { logout })(AuthAccountDropdown);

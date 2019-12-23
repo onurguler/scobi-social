@@ -41,17 +41,17 @@ const App = () => {
             <Route exact path="/login" component={Login} />
             <Route exact path="/2FA" component={TwoFA} />
             <Route exact path="/register" component={Signup} />
-            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/@:username" component={Profile} />
             <Route exact path="/topic" component={Topic} />
             <Route exact path="/profile/edit" component={ProfileEdit} />
             <Route exact path="/profile/edit/:option" component={ProfileEdit} />
             <Route exact path="/topic/:topic_name" component={Topic} />
             <Route exact path="/profile/edit" component={ProfileEdit} />
             <Route exact path="/profile/edit/:option" component={ProfileEdit} />
-            <Route exact path="/posts/new" component={NewPost} />
+            <Route exact path="/new-post" component={NewPost} />
             <Route exact path="/settings" component={Settings} />
             <Route exact path="/contact" component={Contact} />
-            <Route exact path="/posts" component={Post} />
+            <Route exact path="/posts/:post_id" component={Post} />
             <Route exact path="/AboutUs" component={AboutUs} />
             <Route exact path="/posts/:post_id/comments" component={Comments} />
             <Route exact path="/privacy" component={Privacy} />
