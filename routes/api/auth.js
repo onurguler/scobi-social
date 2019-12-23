@@ -3,10 +3,7 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
-<<<<<<< HEAD
 const speakeasy = require("speakeasy");
-=======
->>>>>>> master
 const { check, validationResult } = require("express-validator");
 
 const router = express.Router();
@@ -32,10 +29,7 @@ router.get("/", auth, async (req, res) => {
 // @access  Public
 router.post(
   "/",
-  [
-    check("email", "Please enter a valid email").isEmail(),
-    check("password", "Password is required").exists()
-  ],
+  [check("email", "Please enter a valid email").isEmail(), check("password", "Password is required").exists()],
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -49,17 +43,13 @@ router.post(
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const payload = {
@@ -84,10 +74,7 @@ router.post(
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email"
-    ]
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
   })
 );
 
