@@ -167,7 +167,7 @@ const ProfilePost = ({
               <FontAwesomeIcon className="align-middle" icon={faEye} />
             </a>
             <a className="text-decoration-none text-secondary" href="#!">
-              <small className="ml-2">200K+</small>
+              <small className="ml-2">{post.views && post.views.length}</small>
             </a>
           </div>
 

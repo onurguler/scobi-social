@@ -5,7 +5,7 @@ import PostContent from './PostContent';
 import { connect } from 'react-redux';
 import { getPost } from '../../store/actions/post';
 
-const Post = ({ getPost, match, post }) => {
+const Post = ({ getPost, match, post, auth }) => {
   useEffect(() => {
     getPost(match.params.post_id);
   }, [match]);
@@ -14,14 +14,14 @@ const Post = ({ getPost, match, post }) => {
       <div className="mb-4 rounded-lg px-4 py-4 bg-white post">
         <h2>{post && post.title}</h2>
         <PostUser post={post} className="mt-4" />
-        <PostContent post={post} className="mt-4" />
+        <PostContent post={post} auth={auth} className="mt-4" />
       </div>
     </div>
   );
 };
 
 const mapStateToProps = state => {
-  const { post } = state;
-  return { post: post.post };
+  const { post, auth } = state;
+  return { post: post.post, auth };
 };
 export default connect(mapStateToProps, { getPost })(Post);

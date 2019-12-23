@@ -57,6 +57,7 @@ export default function(state = initialState, action) {
         posts: state.posts.map(post =>
           post._id === payload.id ? { ...post, likes: payload.likes } : post
         ),
+        post: state.post ? { ...state.post, likes: payload.likes } : null,
         loading: false
       };
     case UPDATE_DISLIKES:
@@ -67,6 +68,7 @@ export default function(state = initialState, action) {
             ? { ...post, dislikes: payload.dislikes }
             : post
         ),
+        post: state.post ? { ...state.post, dislikes: payload.dislikes } : null,
         loading: false
       };
     case ADD_COMMENT:
