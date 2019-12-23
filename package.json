@@ -29,13 +29,10 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-<<<<<<< HEAD
     "qrcode": "^1.4.4",
-    "speakeasy": "^2.0.0"
-=======
+    "speakeasy": "^2.0.0",
     "react-showdown": "^1.6.0",
     "request-ip": "^2.1.3"
->>>>>>> master
   },
   "devDependencies": {
     "concurrently": "^5.0.1",
