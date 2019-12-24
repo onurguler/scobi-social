@@ -6,14 +6,17 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  ACCOUNT_DELETED
+  ACCOUNT_DELETED,
+  REDIRECT_TWO_FA,
+  GET_TOKEN
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
   isAuthenticated: null,
   loading: true,
-  user: null
+  user: null,
+  two_fa: null
 };
 
 export default function(state = initialState, action) {
@@ -26,6 +29,17 @@ export default function(state = initialState, action) {
         isAuthenticated: true,
         loading: false,
         user: payload
+      };
+    case GET_TOKEN:
+      return {
+        ...state,
+        ...payload
+      };
+    case REDIRECT_TWO_FA:
+      return {
+        ...state,
+        two_fa: payload.two_fa,
+        user: payload.user
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
@@ -46,7 +60,10 @@ export default function(state = initialState, action) {
         ...state,
         token: null,
         isAuthenticated: false,
-        loading: true
+        loading: true,
+        user: null,
+        two_fa: null,
+        secret: null
       };
     default:
       return state;

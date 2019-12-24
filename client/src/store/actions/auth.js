@@ -8,7 +8,9 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  CLEAR_PROFILE
+  CLEAR_PROFILE,
+  REDIRECT_TWO_FA,
+  GET_TOKEN
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 
@@ -20,7 +22,6 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get('/api/auth');
-    console.log(res);
 
     dispatch({
       type: USER_LOADED,
@@ -78,6 +79,13 @@ export const login = (email, password) => async dispatch => {
   try {
     const res = await axios.post('/api/auth', body, config);
 
+    if (res.data.two_fa) {
+      return dispatch({
+        type: REDIRECT_TWO_FA,
+        payload: res.data
+      });
+    }
+
     dispatch({
       type: LOGIN_SUCCESS,
       payload: res.data
@@ -86,11 +94,71 @@ export const login = (email, password) => async dispatch => {
     dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
-
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
     }
+    console.log(err);
+    dispatch({
+      type: LOGIN_FAIL
+    });
+  }
+};
 
+export const getToken = user_id => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    let res = await axios.get('/api/auth/totp-secret');
+    const secret = res.data.secret;
+
+    const body = JSON.stringify({ secret, user_id });
+    res = await axios.post('/api/auth/totp-generate', body, config);
+
+    dispatch({
+      type: GET_TOKEN,
+      payload: { secret }
+    });
+  } catch (err) {
+    // const errors = err.response.data.errors;
+    // if (errors) {
+    //   errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    // }
+    console.log(err);
+    dispatch({
+      type: LOGIN_FAIL
+    });
+  }
+};
+
+// Login User 2FA
+export const login_2fa = (secret, token, user_id) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ secret, token, user_id });
+
+  try {
+    const res = await axios.post('/api/auth/totp-validate', body, config);
+
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: res.data
+    });
+
+    dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.errors;
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, 'danger')));
+    }
+    console.log(err);
     dispatch({
       type: LOGIN_FAIL
     });

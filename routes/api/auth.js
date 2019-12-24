@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const config = require("config");
 const jwt = require("jsonwebtoken");
 const speakeasy = require("speakeasy");
+const nodemailer = require("nodemailer");
 const { check, validationResult } = require("express-validator");
 
 const router = express.Router();
@@ -29,10 +30,7 @@ router.get("/", auth, async (req, res) => {
 // @access  Public
 router.post(
   "/",
-  [
-    check("email", "Please enter a valid email").isEmail(),
-    check("password", "Password is required").exists()
-  ],
+  [check("email", "Please enter a valid email").isEmail(), check("password", "Password is required").exists()],
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -46,17 +44,17 @@ router.post(
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
+      }
+
+      if (user.two_fa) {
+        return res.json({ two_fa: user.two_fa, user: { id: user.id } });
       }
 
       const payload = {
@@ -81,10 +79,7 @@ router.post(
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email"
-    ]
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
   })
 );
 
@@ -147,30 +142,84 @@ router.get(
   }
 );
 
-router.post("/totp-secret", (request, response, next) => {
+router.get("/totp-secret", (request, response, next) => {
   var secret = speakeasy.generateSecret({ length: 20 });
-  response.send({ secret: secret.base32 });
+  response.json({ secret: secret.base32 });
 });
 
-router.post("/totp-generate", (request, response, next) => {
-  response.send({
+router.post("/totp-generate", async (req, res, next) => {
+  const { user_id, secret } = req.body;
+
+  const user = await User.findById(user_id);
+
+  if (!user) {
+    return res.status(404).json({ errors: [{ msg: "User not found" }] });
+  }
+
+  const token = {
     token: speakeasy.totp({
-      secret: request.body.secret,
+      secret: secret,
       encoding: "base32"
     }),
     remaining: 120 - Math.floor((new Date().getTime() / 1000.0) % 30)
+  };
+
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    secure: false,
+    auth: {
+      user: "scobisocial@gmail.com",
+      pass: "scobi123@@"
+    }
   });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    to: user.email, // list of receivers
+    subject: "Two Factor Authentication Scobi Social", // Subject line
+    text: token.token
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+  res.json({ secret });
 });
 
-router.post("/totp-validate", (request, response, next) => {
-  response.send({
-    valid: speakeasy.totp.verify({
-      secret: request.body.secret,
-      encoding: "base32",
-      token: request.body.token,
-      window: 0
-    })
+router.post("/totp-validate", async (request, response, next) => {
+  const { secret, token, user_id } = request.body;
+
+  const user = await User.findById(user_id);
+
+  if (!user) {
+    console.log("user nor found");
+    return response.status(404).json({ errors: [{ msg: "User not found" }] });
+  }
+
+  const valid = speakeasy.totp.verify({
+    secret: secret,
+    encoding: "base32",
+    token: token,
+    window: 0
   });
+
+  if (!valid) {
+    console.log("token not valid");
+    return response.status(404).json({ errors: [{ msg: "Token is not valid" }] });
+  }
+
+  const payload = {
+    user: { id: user.id }
+  };
+
+  const jwtToken = jwt.sign(payload, config.get("jwtSecret"), {
+    expiresIn: 360000
+  });
+
+  return response.json({ token: jwtToken });
 });
 
 module.exports = router;
