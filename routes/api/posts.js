@@ -163,6 +163,8 @@ router.delete("/:id", auth, async (req, res) => {
 router.put("/like/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
+    const user = await User.findById(req.user.id).select("-password");
+    const postUser = await User.findOne({ username: post.username });
 
     // Check if the post has already been liked
     if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
@@ -173,7 +175,18 @@ router.put("/like/:id", auth, async (req, res) => {
 
     await post.save();
 
-    res.json(post.likes);
+    postUser.notifications.unshift({
+      user: req.user.id,
+      name: user.name,
+      avatar: user.avatar,
+      msg: "liked your post.",
+      slug: `/posts/${post.id}`,
+      post: post.id
+    });
+
+    await postUser.save();
+
+    return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

@@ -15,7 +15,9 @@ const auth = require("../../middleware/auth");
 // @access  Public
 router.get("/", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id)
+      .select("-password")
+      .populate("notifications.post", ["title"]);
     return res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -28,10 +30,7 @@ router.get("/", auth, async (req, res) => {
 // @access  Public
 router.post(
   "/",
-  [
-    check("email", "Please enter a valid email").isEmail(),
-    check("password", "Password is required").exists()
-  ],
+  [check("email", "Please enter a valid email").isEmail(), check("password", "Password is required").exists()],
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -45,17 +44,13 @@ router.post(
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res
-          .status(400)
-          .json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const payload = {
@@ -80,10 +75,7 @@ router.post(
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: [
-      "https://www.googleapis.com/auth/userinfo.profile",
-      "https://www.googleapis.com/auth/userinfo.email"
-    ]
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
   })
 );
 
