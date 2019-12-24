@@ -29,7 +29,10 @@ router.get("/", auth, async (req, res) => {
 // @access  Public
 router.post(
   "/",
-  [check("email", "Please enter a valid email").isEmail(), check("password", "Password is required").exists()],
+  [
+    check("email", "Please enter a valid email").isEmail(),
+    check("password", "Password is required").exists()
+  ],
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -43,13 +46,17 @@ router.post(
       const user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
       const payload = {
@@ -74,7 +81,10 @@ router.post(
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
   })
 );
 
@@ -148,7 +158,7 @@ router.post("/totp-generate", (request, response, next) => {
       secret: request.body.secret,
       encoding: "base32"
     }),
-    remaining: 30 - Math.floor((new Date().getTime() / 1000.0) % 30)
+    remaining: 120 - Math.floor((new Date().getTime() / 1000.0) % 30)
   });
 });
 
