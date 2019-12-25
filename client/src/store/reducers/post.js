@@ -7,12 +7,14 @@ import {
   ADD_POST,
   GET_POST,
   ADD_COMMENT,
-  REMOVE_COMMENT
+  REMOVE_COMMENT,
+  GET_BOOKMARKS
 } from '../actions/types';
 
 const initialState = {
   posts: [],
   post: null,
+  bookmarks: [],
   loading: true,
   error: {}
 };
@@ -31,6 +33,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         post: payload,
+        loading: false
+      };
+    case GET_BOOKMARKS:
+      return {
+        ...state,
+        bookmarks: payload,
         loading: false
       };
     case ADD_POST:

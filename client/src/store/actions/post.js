@@ -9,7 +9,9 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
-  UPDATE_DISLIKES
+  UPDATE_DISLIKES,
+  GET_BOOKMARKS,
+  BOOKMARKS_ERROR
 } from './types';
 
 // Get posts
@@ -45,6 +47,21 @@ export const getUsersPosts = username => async dispatch => {
   }
 };
 
+export const getUsersBookmarks = () => async dispatch => {
+  try {
+    const res = await axios.get(`/api/posts/user/get/bookmarks`);
+
+    dispatch({
+      type: GET_BOOKMARKS,
+      payload: res.data
+    });
+  } catch (err) {
+    // dispatch({
+    //   type: BOOKMARKS_ERROR,
+    //   payload: { msg: err.response.statusText, status: err.response.status }
+    // });
+  }
+};
 // Add like
 export const addLike = id => async dispatch => {
   try {

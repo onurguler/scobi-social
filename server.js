@@ -19,9 +19,9 @@ app.use("/api/profile", require("./routes/api/profile"));
 app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/contact", require("./routes/api/contact"));
 
-app.use(express.static(__dirname + "/client/public"));
+// app.use(express.static(__dirname + "/client/public"));
 
-app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "client", "public", "index.html")));
+// app.get("*", (req, res) => res.sendFile(path.resolve(__dirname, "client", "public", "index.html")));
 
 const PORT = process.env.PORT || 5000;
 
