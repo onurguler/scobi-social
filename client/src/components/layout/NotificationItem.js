@@ -22,7 +22,7 @@ const NotificationItem = ({ notification }) => {
               <span>{notification && notification.msg}</span>
             </div>
             <div className="text-wrap truncate-3-lines text-xs">
-              {notification && notification.post.title}
+              {notification && notification.post && notification.post.title}
             </div>
             <div>
               <small className="text-secondary">
