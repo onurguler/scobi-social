@@ -122,7 +122,7 @@ passport.use(
     {
       clientID: config.get("FACEBOOK_APP_ID"),
       clientSecret: config.get("FACEBOOK_APP_SECRET"),
-      callbackURL: "http://scobi.social/api/auth/facebook/callback",
+      callbackURL: "https://scobi-social.herokuapp.com/api/auth/facebook/callback",
       profileFields: ["id", "emails", "name", "displayName", "photos"] //This
     },
     async (accessToken, refreshToken, profile, cb) => {
