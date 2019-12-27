@@ -1,37 +1,37 @@
-const passport = require('passport');
-const passportJWT = require('passport-jwt');
+const passport = require("passport");
+const passportJWT = require("passport-jwt");
 
 const ExtractJWT = passportJWT.ExtractJwt;
 
-const LocalStrategy = require('passport-local').Strategy;
+const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = passportJWT.Strategy;
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 
-const config = require('config');
-const generator = require('generate-password');
-const bcrypt = require('bcryptjs');
+const config = require("config");
+const generator = require("generate-password");
+const bcrypt = require("bcryptjs");
 
-const User = require('../models/User');
-const Profile = require('../models/Profile');
-const { generateUniqueUsername } = require('../utils/utils');
+const User = require("../models/User");
+const Profile = require("../models/Profile");
+const { generateUniqueUsername } = require("../utils/utils");
 
 passport.use(
   new LocalStrategy(
     {
-      usernameField: 'email',
-      passwordField: 'password'
+      usernameField: "email",
+      passwordField: "password"
     },
     function(email, password, cb) {
       //Assume there is a DB module pproviding a global UserModel
       return User.findOne({ email, password })
         .then(user => {
           if (!user) {
-            return cb(null, false, { message: 'Incorrect email or password.' });
+            return cb(null, false, { message: "Incorrect email or password." });
           }
 
           return cb(null, user, {
-            message: 'Logged In Successfully'
+            message: "Logged In Successfully"
           });
         })
         .catch(err => {
@@ -42,15 +42,15 @@ passport.use(
 );
 
 passport.use(
-  'jwt',
+  "jwt",
   new JWTStrategy(
     {
-      jwtFromRequest: ExtractJWT.fromHeader('x-auth-token'),
-      secretOrKey: config.get('jwtSecret')
+      jwtFromRequest: ExtractJWT.fromHeader("x-auth-token"),
+      secretOrKey: config.get("jwtSecret")
     },
     (jwtPayload, cb) => {
       return User.findOne({ _id: jwtPayload.user.id })
-        .select('-password')
+        .select("-password")
         .then(user => {
           return cb(null, user);
         })
@@ -62,12 +62,12 @@ passport.use(
 );
 
 passport.use(
-  'google',
+  "google",
   new GoogleStrategy(
     {
-      clientID: config.get('GOOGLE_CLIENT_ID'),
-      clientSecret: config.get('GOOGLE_CLIENT_SECRET'),
-      callbackURL: 'http://localhost:5000/api/auth/google/callback'
+      clientID: config.get("GOOGLE_CLIENT_ID"),
+      clientSecret: config.get("GOOGLE_CLIENT_SECRET"),
+      callbackURL: "http://scobi.social/api/auth/google/callback"
     },
     async (accessToken, refreshToken, profile, cb) => {
       const googleId = profile.id;
@@ -82,7 +82,7 @@ passport.use(
         const name = profile.displayName;
         const avatar = profile.photos[0].value;
         const password = await generator.generate({ length: 10, numbers: true });
-        let username = email.substring(0, email.lastIndexOf('@'));
+        let username = email.substring(0, email.lastIndexOf("@"));
         username = await generateUniqueUsername(username);
 
         user = new User({
@@ -117,13 +117,13 @@ passport.use(
 
 // @TODO: username register
 passport.use(
-  'facebook',
+  "facebook",
   new FacebookStrategy(
     {
-      clientID: config.get('FACEBOOK_APP_ID'),
-      clientSecret: config.get('FACEBOOK_APP_SECRET'),
-      callbackURL: 'http://localhost:5000/api/auth/facebook/callback',
-      profileFields: ['id', 'emails', 'name', 'displayName', 'photos'] //This
+      clientID: config.get("FACEBOOK_APP_ID"),
+      clientSecret: config.get("FACEBOOK_APP_SECRET"),
+      callbackURL: "http://scobi.social/api/auth/facebook/callback",
+      profileFields: ["id", "emails", "name", "displayName", "photos"] //This
     },
     async (accessToken, refreshToken, profile, cb) => {
       const facebookId = profile.id;
