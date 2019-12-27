@@ -14,52 +14,37 @@ const LikesModal = props => {
       centered
       className="modal-fixed">
       <Modal.Header closeButton className="fixed">
-        <Modal.Title id="contained-modal-title-vcenter">Likes</Modal.Title>
+        <Modal.Title id="contained-modal-title-vcenter">
+          {props.title}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div className="d-flex align-items-center justify-content-between mb-4">
-          <Link
-            onClick={props.onHide}
-            className="text-decoration-none text-dark d-flex"
-            to="/profile">
-            <img
-              className="rounded-circle fit-image"
-              src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
-              alt=""
-              width="45"
-              height="45"
-            />
-            <div className="ml-3">
-              <div style={{ fontSize: '0.9rem' }}>yarenyalcin</div>
-              <small className="text-secondary">Yaren Yalçın</small>
+        {props.data &&
+          props.data.map(data => (
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <Link
+                onClick={props.onHide}
+                className="text-decoration-none text-dark d-flex"
+                to={`/@${data.user.username}`}>
+                <img
+                  className="rounded-circle fit-image"
+                  src={data.user.avatar}
+                  alt=""
+                  width="45"
+                  height="45"
+                />
+                <div className="ml-3">
+                  <div style={{ fontSize: '0.9rem' }}>
+                    @{data.user.username}
+                  </div>
+                  <small className="text-secondary">{data.user.name}</small>
+                </div>
+              </Link>
+              <button type="button" class="btn btn-primary btn-sm px-4">
+                Follow
+              </button>
             </div>
-          </Link>
-          <button type="button" class="btn btn-primary btn-sm px-4">
-            Follow
-          </button>
-        </div>
-
-        <div className="d-flex align-items-center justify-content-between mb-2">
-          <Link
-            onClick={props.onHide}
-            className="text-decoration-none text-dark d-flex"
-            to="/profile">
-            <img
-              className="rounded-circle fit-image"
-              src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=635&q=80"
-              alt=""
-              width="45"
-              height="45"
-            />
-            <div className="ml-3">
-              <div style={{ fontSize: '0.9rem' }}>luisviol</div>
-              <small className="text-secondary">Luis Villasmill</small>
-            </div>
-          </Link>
-          <button type="button" class="btn btn-primary btn-sm px-4">
-            Follow
-          </button>
-        </div>
+          ))}
       </Modal.Body>
     </Modal>
   );
