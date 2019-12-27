@@ -1,7 +1,12 @@
 import axios from 'axios';
 import { setAlert } from './alert';
 
-import { GET_PROFILE, PROFILE_ERROR, CLEAR_PROFILE } from './types';
+import {
+  GET_PROFILE,
+  PROFILE_ERROR,
+  CLEAR_PROFILE,
+  UPDATE_FOLLOWERS
+} from './types';
 
 // Get current users profile
 export const getCurrentProfile = () => async dispatch => {
@@ -36,5 +41,31 @@ export const getProfileByUsername = username => async dispatch => {
     //   type: PROFILE_ERROR,
     //   payload: { msg: err.response.statusText, status: err.response.status }
     // });
+  }
+};
+
+export const follow = username => async dispatch => {
+  try {
+    const { data } = await axios.put(`/api/profile/follow/${username}`);
+
+    dispatch({
+      type: UPDATE_FOLLOWERS,
+      payload: data
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const unfollow = username => async dispatch => {
+  try {
+    const { data } = await axios.put(`/api/profile/unfollow/${username}`);
+
+    dispatch({
+      type: UPDATE_FOLLOWERS,
+      payload: data
+    });
+  } catch (error) {
+    console.log(error);
   }
 };

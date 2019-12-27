@@ -5,8 +5,9 @@ import { faEdit } from '@fortawesome/free-regular-svg-icons';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import FollowersModal from './FollowersModal';
+import { follow, unfollow } from '../../store/actions/profile';
 
-const ProfileTop = ({ profile, user, loading, posts }) => {
+const ProfileTop = ({ profile, user, loading, posts, follow, unfollow }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalData, setModalData] = useState([]);
@@ -35,13 +36,25 @@ const ProfileTop = ({ profile, user, loading, posts }) => {
                   )}
                 </span>
 
-                {!loading && user && profile.user.username !== user.username && (
-                  <button
-                    type="button"
-                    class="btn btn-outline-light btn-sm px-4">
-                    Follow
-                  </button>
-                )}
+                {!loading && user && profile.user.username !== user.username ? (
+                  profile.followers.filter(
+                    follower => follower.user._id || follower.user === user._id
+                  ).length > 0 ? (
+                    <button
+                      type="button"
+                      class="btn btn-outline-light btn-sm px-4"
+                      onClick={() => unfollow(profile.user.username)}>
+                      Unfollow
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      class="btn btn-outline-light btn-sm px-4"
+                      onClick={() => follow(profile.user.username)}>
+                      Follow
+                    </button>
+                  )
+                ) : null}
               </div>
               <div className="d-flex flex-row text-center justify-content-center text-gray-100">
                 <div className="px-4 py-2 border-right border-gray-300">
@@ -92,7 +105,9 @@ const ProfileTop = ({ profile, user, loading, posts }) => {
 
 ProfileTop.propTypes = {
   user: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired,
+  follow: PropTypes.func.isRequired,
+  unfollow: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -100,4 +115,4 @@ const mapStateToProps = state => ({
   loading: state.auth.loading
 });
 
-export default connect(mapStateToProps, null)(ProfileTop);
+export default connect(mapStateToProps, { follow, unfollow })(ProfileTop);

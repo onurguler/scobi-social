@@ -32,11 +32,8 @@ router.get("/me", auth, async (req, res) => {
 // @access   Public
 router.get("/user/:username", async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.params.username }).select(
-      "id"
-    );
-    if (!user)
-      return res.status(400).json({ errors: [{ msg: "User not found" }] });
+    const user = await User.findOne({ username: req.params.username }).select("id");
+    if (!user) return res.status(400).json({ errors: [{ msg: "User not found" }] });
     const profile = await Profile.findOne({
       user: user.id
     })
@@ -73,14 +70,8 @@ router.put("/follow/:username", auth, async (req, res) => {
     const source = await Profile.findOne({ user: req.user.id });
     const sourceUser = await User.findById(req.user.id);
     const target = await Profile.findOne({ user: user.id });
-    if (
-      source.following.filter(
-        userDb => userDb.user.toString() === user.id.toString()
-      ).length > 0
-    ) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "User Already Following" }] });
+    if (source.following.filter(userDb => userDb.user.toString() === user.id.toString()).length > 0) {
+      return res.status(400).json({ errors: [{ msg: "User Already Following" }] });
     }
 
     source.following.unshift({ user: user.id });
@@ -99,7 +90,7 @@ router.put("/follow/:username", auth, async (req, res) => {
     await source.save();
     await target.save();
 
-    res.json({ source, target });
+    res.json({ followers: target.followers });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
@@ -123,30 +114,20 @@ router.put("/unfollow/:username", auth, async (req, res) => {
     const source = await Profile.findOne({ user: req.user.id });
     const target = await Profile.findOne({ user: user.id });
 
-    if (
-      source.following.filter(
-        userDb => userDb.user.toString() === user.id.toString()
-      ).length === 0
-    ) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "Not Yet Been Following" }] });
+    if (source.following.filter(userDb => userDb.user.toString() === user.id.toString()).length === 0) {
+      return res.status(400).json({ errors: [{ msg: "Not Yet Been Following" }] });
     }
 
-    const removeIndexFollowing = source.following
-      .map(follow => follow.user.toString())
-      .indexOf(user.id);
+    const removeIndexFollowing = source.following.map(follow => follow.user.toString()).indexOf(user.id);
 
-    const removeIndexFollowers = target.followers
-      .map(follower => follower.user.toString())
-      .indexOf(req.user.id);
+    const removeIndexFollowers = target.followers.map(follower => follower.user.toString()).indexOf(req.user.id);
 
     source.following.splice(removeIndexFollowing, 1);
     target.followers.splice(removeIndexFollowers, 1);
 
     await source.save();
     await target.save();
-    res.json({ source, target });
+    res.json({ followers: target.followers });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");

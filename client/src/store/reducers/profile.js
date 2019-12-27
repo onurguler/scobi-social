@@ -4,7 +4,7 @@ import {
   CLEAR_PROFILE,
   UPDATE_PROFILE,
   GET_PROFILES,
-  GET_REPOS
+  UPDATE_FOLLOWERS
 } from '../actions/types';
 
 const initialState = {
@@ -46,11 +46,10 @@ export default function(state = initialState, action) {
         repos: [],
         loading: true
       };
-    case GET_REPOS:
+    case UPDATE_FOLLOWERS:
       return {
         ...state,
-        repos: payload,
-        loading: false
+        profile: { ...state.profile, followers: payload.followers }
       };
     default:
       return state;
