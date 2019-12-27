@@ -16,15 +16,13 @@ const Profile = ({
   profile,
   auth,
   post,
-  getUsersPosts,
-  getUsersBookmarks
+  getUsersPosts
 }) => {
   useEffect(() => {
     const username = match.params.username;
     if (username) {
       getProfileByUsername(username);
       getUsersPosts(username);
-      getUsersBookmarks();
     }
   }, [getProfileByUsername, match.params, getUsersPosts, getUsersBookmarks]);
   const [showPosts, setShowPosts] = useState(true);
@@ -82,6 +80,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
   getProfileByUsername,
-  getUsersPosts,
-  getUsersBookmarks
+  getUsersPosts
 })(Profile);

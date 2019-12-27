@@ -167,9 +167,7 @@ router.put("/like/:id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (
-      post.likes.filter(like => like.user.toString() === req.user.id).length > 0
-    ) {
+    if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
       return res.status(400).json({ msg: "Post already liked" });
     }
 
@@ -192,17 +190,12 @@ router.put("/unlike/:id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (
-      post.likes.filter(like => like.user.toString() === req.user.id).length ===
-      0
-    ) {
+    if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
       return res.status(400).json({ msg: "Post has not yet been liked" });
     }
 
     // Get remove index
-    const removeIndex = post.likes
-      .map(like => like.user.toString())
-      .indexOf(req.user.id);
+    const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id);
 
     post.likes.splice(removeIndex, 1);
 
@@ -223,10 +216,7 @@ router.put("/dislike/:id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (
-      post.dislikes.filter(dislike => dislike.user.toString() === req.user.id)
-        .length > 0
-    ) {
+    if (post.dislikes.filter(dislike => dislike.user.toString() === req.user.id).length > 0) {
       return res.status(400).json({ msg: "Post already disliked" });
     }
 
@@ -249,17 +239,12 @@ router.put("/undislike/:id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (
-      post.dislikes.filter(dislike => dislike.user.toString() === req.user.id)
-        .length === 0
-    ) {
+    if (post.dislikes.filter(dislike => dislike.user.toString() === req.user.id).length === 0) {
       return res.status(400).json({ msg: "Post has not yet been disliked" });
     }
 
     // Get remove index
-    const removeIndex = post.dislikes
-      .map(dislike => dislike.user.toString())
-      .indexOf(req.user.id);
+    const removeIndex = post.dislikes.map(dislike => dislike.user.toString()).indexOf(req.user.id);
 
     post.dislikes.splice(removeIndex, 1);
 
@@ -323,9 +308,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Pull out comment
-    const comment = post.comments.find(
-      comment => comment.id === req.params.comment_id
-    );
+    const comment = post.comments.find(comment => comment.id === req.params.comment_id);
 
     // Make sure comment exists
     if (!comment) {
@@ -338,9 +321,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     }
 
     // Get remove index
-    const removeIndex = post.comments
-      .map(comment => comment.id)
-      .indexOf(req.params.comment_id);
+    const removeIndex = post.comments.map(comment => comment.id).indexOf(req.params.comment_id);
 
     post.comments.splice(removeIndex, 1);
 
@@ -377,20 +358,21 @@ router.put("/bookmark/:id", auth, async (req, res) => {
       return res.status(404).json({ msg: "Post not found" });
     }
 
-    const user = await User.findById(req.user.id);
+    let user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ msg: "User is not found" });
     }
 
-    if (
-      user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id)
-        .length > 0
-    ) {
+    if (user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id).length > 0) {
       return res.status(400).json({ msg: "Post already bookmarked" });
     }
+
     user.bookmarks.unshift({ post: post.id });
+
     await user.save();
-    console.log(user.bookmarks);
+
+    user = await User.findById(req.user.id).populate("bookmarks.post");
+
     return res.json(user.bookmarks);
   } catch (error) {
     console.log(error);
@@ -406,17 +388,12 @@ router.put("/unbookmark/:id", auth, async (req, res) => {
       return res.status(404).json({ msg: "User is not found" });
     }
 
-    if (
-      user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id)
-        .length === 0
-    ) {
+    if (user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id).length === 0) {
       return res.status(400).json({ msg: "Post has not yet been bookmarked" });
     }
 
     // Get remove index
-    const removeIndex = user.bookmarks
-      .map(bookmark => bookmark.post.toString())
-      .indexOf(post.id);
+    const removeIndex = user.bookmarks.map(bookmark => bookmark.post.toString()).indexOf(post.id);
 
     user.bookmarks.splice(removeIndex, 1);
 

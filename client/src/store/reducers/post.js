@@ -8,7 +8,8 @@ import {
   GET_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
-  GET_BOOKMARKS
+  GET_BOOKMARKS,
+  UPDATE_BOOKMARKS
 } from '../actions/types';
 
 const initialState = {
@@ -58,6 +59,11 @@ export default function(state = initialState, action) {
         ...state,
         error: payload,
         loading: false
+      };
+    case UPDATE_BOOKMARKS:
+      return {
+        ...state,
+        bookmarks: payload
       };
     case UPDATE_LIKES:
       return {

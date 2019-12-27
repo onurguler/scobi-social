@@ -11,7 +11,8 @@ import {
   REMOVE_COMMENT,
   UPDATE_DISLIKES,
   GET_BOOKMARKS,
-  BOOKMARKS_ERROR
+  BOOKMARKS_ERROR,
+  UPDATE_BOOKMARKS
 } from './types';
 
 // Get posts
@@ -76,6 +77,20 @@ export const addLike = id => async dispatch => {
       type: POST_ERROR,
       payload: { msg: err.response.statusText, status: err.response.status }
     });
+  }
+};
+
+// Add Bookmark
+export const addBokmark = id => async dispatch => {
+  try {
+    const { data } = await axios.put(`/api/posts/bookmark/${id}`);
+
+    dispatch({
+      type: UPDATE_BOOKMARKS,
+      payload: data
+    });
+  } catch (error) {
+    console.log(error);
   }
 };
 
