@@ -87,7 +87,7 @@ const Login = ({ isAuthenticated, login }) => {
             <Button id="google" variant="default">
               <a
                 className="text-decoration-none"
-                href="http://localhost:5000/api/auth/google">
+                href="http://scobi.social/api/auth/google">
                 <FontAwesomeIcon icon={faGooglePlus} size="2x" />
               </a>
             </Button>
