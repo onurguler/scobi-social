@@ -123,7 +123,7 @@ passport.use(
       clientID: config.get("FACEBOOK_APP_ID"),
       clientSecret: config.get("FACEBOOK_APP_SECRET"),
       callbackURL: "https://scobi-social.herokuapp.com/api/auth/facebook/callback",
-      profileFields: ["id", "emails", "name", "displayName", "photos"] //This
+      profileFields: ["id", "emails", "name", "displayName", "photos", "username"] //This
     },
     async (accessToken, refreshToken, profile, cb) => {
       const facebookId = profile.id;
@@ -138,9 +138,11 @@ passport.use(
         const name = profile.displayName;
         const avatar = profile.photos[0].value;
         const password = generator.generate({ length: 10, numbers: true });
+        const username = await generateUniqueUsername(email.substring(0, email.lastIndexOf("@")));
 
         user = new User({
           facebookId: profile.id,
+          username,
           name,
           email,
           password,
