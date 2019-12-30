@@ -153,6 +153,12 @@ passport.use(
 
         user.password = await bcrypt.hash(password, salt);
 
+        const profileDb = new Profile({
+          user: user.id
+        });
+
+        await profileDb.save();
+
         await user.save();
 
         return cb((err = null), user);
