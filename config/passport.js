@@ -108,7 +108,7 @@ passport.use(
 
         return cb((err = null), user);
       } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
         return cb(err, (user = null));
       }
     }
@@ -127,7 +127,6 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, cb) => {
       const facebookId = profile.id;
-      console.log(profile);
       const email = profile.emails[0].value;
 
       try {
@@ -163,7 +162,7 @@ passport.use(
 
         return cb((err = null), user);
       } catch (err) {
-        console.log(err.message);
+        console.error(err.message);
         return cb(err, (user = null));
       }
     }
