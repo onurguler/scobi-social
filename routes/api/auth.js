@@ -106,7 +106,7 @@ router.get(
       expiresIn: 360000
     });
 
-    return res.redirect("http://localhost:3000?token=" + token);
+    return res.redirect("http://scobi.social?token=" + token);
   }
 );
 
@@ -140,7 +140,7 @@ router.get(
       expiresIn: 360000
     });
 
-    return res.redirect("http://localhost:3000?token=" + token);
+    return res.redirect("http://scobi.social?token=" + token);
   }
 );
 
