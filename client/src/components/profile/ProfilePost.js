@@ -23,7 +23,8 @@ import {
   addLike,
   removeLike,
   addDislike,
-  removeDislike
+  removeDislike,
+  addBokmark
 } from '../../store/actions/post';
 
 const ProfilePost = ({
@@ -32,7 +33,9 @@ const ProfilePost = ({
   auth,
   removeLike,
   addDislike,
-  removeDislike
+  removeDislike,
+  addBokmark,
+  bookmarks
 }) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
 
@@ -172,9 +175,27 @@ const ProfilePost = ({
           </div>
 
           <div>
-            <a className="text-decoration-none text-secondary" href="#!">
-              <FontAwesomeIcon className="align-middle" icon={faBookmark} />
-            </a>
+            {post &&
+            bookmarks &&
+            bookmarks.filter(bookmark => bookmark.post._id === post._id)
+              .length > 0 ? (
+              <a
+                className="text-decoration-none text-secondary"
+                href="#!"
+                onClick={() => addBokmark(post._id)}>
+                <FontAwesomeIcon
+                  className="align-middle"
+                  icon={faBookmarkSolid}
+                />
+              </a>
+            ) : (
+              <a
+                className="text-decoration-none text-secondary"
+                href="#!"
+                onClick={() => addBokmark(post._id)}>
+                <FontAwesomeIcon className="align-middle" icon={faBookmark} />
+              </a>
+            )}
             <a className="text-decoration-none text-secondary ml-4" href="#!">
               <FontAwesomeIcon className="align-middle" icon={faShare} />
             </a>
@@ -190,13 +211,14 @@ const ProfilePost = ({
 };
 
 const mapStateToProps = state => {
-  const { auth } = state;
-  return { auth };
+  const { auth, post } = state;
+  return { auth, bookmarks: post.bookmarks };
 };
 
 export default connect(mapStateToProps, {
   addLike,
   removeLike,
   addDislike,
-  removeDislike
+  removeDislike,
+  addBokmark
 })(ProfilePost);

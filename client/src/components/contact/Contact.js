@@ -4,10 +4,13 @@ import axios from 'axios';
 function Contact({ history }) {
   const [formData, setFormData] = useState({
     name: '',
-    surname: ''
+    surname: '',
+    email: '',
+    phone: '',
+    message: ''
   });
 
-  const { name, surname } = formData;
+  const { name, surname, email, phone, message } = formData;
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,9 +19,11 @@ function Contact({ history }) {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/contact', formData);
+      const res = await axios.post('/api/contact', formData);
       history.push('/');
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -75,6 +80,8 @@ function Contact({ history }) {
                         <div class="form-group">
                           <label for="form_email">Email *</label>
                           <input
+                            value={email}
+                            onChange={e => onChange(e)}
                             id="form_email"
                             type="email"
                             name="email"
@@ -88,16 +95,15 @@ function Contact({ history }) {
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
-                          <label for="form_phone">Phone *</label>
+                          <label for="form_phone">Phone</label>
                           <input
+                            value={phone}
+                            onChange={e => onChange(e)}
                             id="form_phone"
                             type="tel"
                             name="phone"
                             class="form-control"
                             placeholder="Please enter your phone."
-                            required
-                            oninvalid="setCustomValidity('Plz enter your correct phone number ')"
-                            onchange="try{setCustomValidity('')}catch(e){}"
                           />
                         </div>
                       </div>
@@ -110,6 +116,8 @@ function Contact({ history }) {
                             id="form_message"
                             name="message"
                             class="form-control"
+                            value={message}
+                            onChange={e => onChange(e)}
                             placeholder="Please enter your message."
                             rows="4"
                             required="required"

@@ -5,10 +5,16 @@ import CategoriesList from './CategoriesList';
 import queryString from 'query-string';
 import TopicCard from '../topic/TopicCard';
 import { connect } from 'react-redux';
-import { getPosts } from '../../store/actions/post';
+import { getPosts, getUsersBookmarks } from '../../store/actions/post';
 import PropTypes from 'prop-types';
 
-const Home = ({ location, history, post: { posts, loading }, getPosts }) => {
+const Home = ({
+  location,
+  history,
+  post: { posts, loading },
+  getPosts,
+  getUsersBookmarks
+}) => {
   useEffect(() => {
     var query = queryString.parse(location.search);
     if (query.token) {
@@ -17,6 +23,7 @@ const Home = ({ location, history, post: { posts, loading }, getPosts }) => {
     }
 
     getPosts();
+    getUsersBookmarks();
   }, [location, history, getPosts]);
 
   return (
@@ -40,7 +47,8 @@ const Home = ({ location, history, post: { posts, loading }, getPosts }) => {
 
 Home.propTypes = {
   post: PropTypes.object.isRequired,
-  getPosts: PropTypes.func.isRequired
+  getPosts: PropTypes.func.isRequired,
+  getUsersBookmarks: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -49,4 +57,4 @@ const mapStateToProps = state => {
   return { post };
 };
 
-export default connect(mapStateToProps, { getPosts })(Home);
+export default connect(mapStateToProps, { getPosts, getUsersBookmarks })(Home);

@@ -390,4 +390,76 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
   }
 });
 
+router.get("/user/get/bookmarks", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).populate("bookmarks.post");
+
+    if (!user) {
+      return res.status(400).json({ errors: [{ msg: "User not found" }] });
+    }
+
+    res.json(user.bookmarks);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.put("/bookmark/:id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    // Check for ObjectId format and post
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    let user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ msg: "User is not found" });
+    }
+
+    if (user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id).length > 0) {
+      return res.status(400).json({ msg: "Post already bookmarked" });
+    }
+
+    user.bookmarks.unshift({ post: post.id });
+
+    await user.save();
+
+    user = await User.findById(req.user.id).populate("bookmarks.post");
+
+    return res.json(user.bookmarks);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.put("/unbookmark/:id", auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ msg: "User is not found" });
+    }
+
+    if (user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id).length === 0) {
+      return res.status(400).json({ msg: "Post has not yet been bookmarked" });
+    }
+
+    // Get remove index
+    const removeIndex = user.bookmarks.map(bookmark => bookmark.post.toString()).indexOf(post.id);
+
+    user.bookmarks.splice(removeIndex, 1);
+
+    await user.save();
+
+    res.json(user.bookmarks);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
