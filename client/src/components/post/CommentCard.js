@@ -18,8 +18,10 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import LikesModal from '../post/LikesModal';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { deleteComment } from '../../store/actions/post';
 
-const CommentCard = ({ comment }) => {
+const CommentCard = ({ comment, post, deleteComment }) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
 
   return (
@@ -27,15 +29,19 @@ const CommentCard = ({ comment }) => {
       <div className="mb-4 border rounded-lg px-4 py-4 bg-white profile-post shadow-sm">
         <div className="d-flex align-items-center justify-content-between mb-4">
           <div className="d-flex">
-            <img
-              className="rounded-circle fit-image"
-              src={comment.avatar}
-              width="50"
-              height="50"
-              alt=""
-            />
+            <Link to={`/@${comment.username}`}>
+              <img
+                className="rounded-circle fit-image"
+                src={comment.avatar}
+                width="50"
+                height="50"
+                alt=""
+              />
+            </Link>
             <div className="ml-3">
-              <div className="font-weight-bold">{comment.name}</div>
+              <Link to={`/@${comment.username}`} className="text-dark">
+                <div className="font-weight-bold">{comment.name}</div>
+              </Link>
               <div>
                 <small className="text-secondary">{comment.date}</small>
               </div>
@@ -55,21 +61,11 @@ const CommentCard = ({ comment }) => {
             <div
               className="dropdown-menu dropdown-menu-right"
               aria-labelledby="dropdownMenuButton">
-              <a className="dropdown-item" href="#!">
-                Bookmark
-              </a>
-              <a className="dropdown-item" href="#!">
-                Hide
-              </a>
-              <a className="dropdown-item" href="#!">
+              <li
+                className="dropdown-item"
+                onClick={() => deleteComment(post._id, comment._id)}>
                 Delete
-              </a>
-              <a className="dropdown-item" href="#!">
-                Unfollow
-              </a>
-              <a className="dropdown-item" href="#!">
-                Report
-              </a>
+              </li>
             </div>
           </div>
         </div>
@@ -85,7 +81,9 @@ const CommentCard = ({ comment }) => {
 };
 
 CommentCard.propTypes = {
-  comment: PropTypes.object.isRequired
+  comment: PropTypes.object.isRequired,
+  post: PropTypes.object.isRequired,
+  deleteComment: PropTypes.func.isRequired
 };
 
-export default CommentCard;
+export default connect(null, { deleteComment })(CommentCard);

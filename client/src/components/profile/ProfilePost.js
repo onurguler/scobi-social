@@ -25,7 +25,8 @@ import {
   addDislike,
   removeDislike,
   addBookmark,
-  removeBookmark
+  removeBookmark,
+  deletePost
 } from '../../store/actions/post';
 
 const ProfilePost = ({
@@ -37,7 +38,8 @@ const ProfilePost = ({
   removeDislike,
   addBookmark,
   removeBookmark,
-  bookmarks
+  bookmarks,
+  deletePost
 }) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
   const [modalData, setModalData] = useState(null);
@@ -77,21 +79,11 @@ const ProfilePost = ({
             <div
               className="dropdown-menu dropdown-menu-right"
               aria-labelledby="dropdownMenuButton">
-              <a className="dropdown-item" href="#!">
-                Bookmark
-              </a>
-              <a className="dropdown-item" href="#!">
-                Hide
-              </a>
-              <a className="dropdown-item" href="#!">
+              <li
+                className="dropdown-item"
+                onClick={() => deletePost(post._id)}>
                 Delete
-              </a>
-              <a className="dropdown-item" href="#!">
-                Unfollow
-              </a>
-              <a className="dropdown-item" href="#!">
-                Report
-              </a>
+              </li>
             </div>
           </div>
         </div>
@@ -237,5 +229,6 @@ export default connect(mapStateToProps, {
   addDislike,
   removeDislike,
   addBookmark,
-  removeBookmark
+  removeBookmark,
+  deletePost
 })(ProfilePost);
