@@ -4,7 +4,8 @@ import {
   CLEAR_PROFILE,
   UPDATE_PROFILE,
   GET_PROFILES,
-  UPDATE_FOLLOWERS
+  UPDATE_FOLLOWERS,
+  GET_CURRENT_PROFILE
 } from '../actions/types';
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   profiles: [],
   repos: [],
   loading: true,
+  currentProfile: null,
   error: {}
 };
 
@@ -19,6 +21,11 @@ export default function(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case GET_CURRENT_PROFILE:
+      return {
+        ...state,
+        currentProfile: payload
+      };
     case GET_PROFILE:
     case UPDATE_PROFILE:
       return {

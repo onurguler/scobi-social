@@ -40,9 +40,6 @@ const LikesModal = props => {
                   <small className="text-secondary">{data.user.name}</small>
                 </div>
               </Link>
-              <button type="button" class="btn btn-primary btn-sm px-4">
-                Follow
-              </button>
             </div>
           ))}
       </Modal.Body>

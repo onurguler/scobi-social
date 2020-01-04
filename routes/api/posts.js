@@ -67,7 +67,10 @@ router.post(
 // @access   Public
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().sort({ date: -1 });
+    const posts = await Post.find()
+      .sort({ date: -1 })
+      .populate("likes.user", ["name", "username", "avatar"])
+      .populate("dislikes.user", ["name", "username", "avatar"]);
     res.json(posts);
   } catch (err) {
     console.error(err.message);
@@ -80,9 +83,12 @@ router.get("/", async (req, res) => {
 // @access   Public
 router.get("/user/:username", async (req, res) => {
   try {
-    const posts = await Post.find({ username: req.params.username }).sort({
-      date: -1
-    });
+    const posts = await Post.find({ username: req.params.username })
+      .sort({
+        date: -1
+      })
+      .populate("likes.user", ["name", "username", "avatar"])
+      .populate("dislikes.user", ["name", "username", "avatar"]);
     res.json(posts);
   } catch (err) {
     console.error(err.message);
@@ -164,14 +170,12 @@ router.delete("/:id", auth, async (req, res) => {
 // @access   Private
 router.put("/like/:id", auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    let post = await Post.findById(req.params.id);
     const user = await User.findById(req.user.id).select("-password");
     const postUser = await User.findOne({ username: post.username });
 
     // Check if the post has already been liked
-    if (
-      post.likes.filter(like => like.user.toString() === req.user.id).length > 0
-    ) {
+    if (post.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
       return res.status(400).json({ msg: "Post already liked" });
     }
 
@@ -190,6 +194,12 @@ router.put("/like/:id", auth, async (req, res) => {
 
     await postUser.save();
 
+    post = await Post.findById(req.params.id).populate("likes.user", [
+      "name",
+      "username",
+      "avatar"
+    ]);
+
     return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
@@ -202,24 +212,25 @@ router.put("/like/:id", auth, async (req, res) => {
 // @access   Private
 router.put("/unlike/:id", auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    let post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (
-      post.likes.filter(like => like.user.toString() === req.user.id).length ===
-      0
-    ) {
+    if (post.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
       return res.status(400).json({ msg: "Post has not yet been liked" });
     }
 
     // Get remove index
-    const removeIndex = post.likes
-      .map(like => like.user.toString())
-      .indexOf(req.user.id);
+    const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id);
 
     post.likes.splice(removeIndex, 1);
 
     await post.save();
+
+    post = await Post.findById(req.params.id).populate("likes.user", [
+      "name",
+      "username",
+      "avatar"
+    ]);
 
     res.json(post.likes);
   } catch (err) {
@@ -233,15 +244,12 @@ router.put("/unlike/:id", auth, async (req, res) => {
 // @access   Private
 router.put("/dislike/:id", auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    let post = await Post.findById(req.params.id);
     const user = await User.findById(req.user.id).select("-password");
     const postUser = await User.findOne({ username: post.username });
 
     // Check if the post has already been liked
-    if (
-      post.dislikes.filter(dislike => dislike.user.toString() === req.user.id)
-        .length > 0
-    ) {
+    if (post.dislikes.filter(dislike => dislike.user.toString() === req.user.id).length > 0) {
       return res.status(400).json({ msg: "Post already disliked" });
     }
 
@@ -260,6 +268,12 @@ router.put("/dislike/:id", auth, async (req, res) => {
 
     await postUser.save();
 
+    post = await Post.findById(req.params.id).populate("dislikes.user", [
+      "name",
+      "username",
+      "avatar"
+    ]);
+
     res.json(post.dislikes);
   } catch (err) {
     console.error(err.message);
@@ -272,24 +286,25 @@ router.put("/dislike/:id", auth, async (req, res) => {
 // @access   Private
 router.put("/undislike/:id", auth, async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    let post = await Post.findById(req.params.id);
 
     // Check if the post has already been liked
-    if (
-      post.dislikes.filter(dislike => dislike.user.toString() === req.user.id)
-        .length === 0
-    ) {
+    if (post.dislikes.filter(dislike => dislike.user.toString() === req.user.id).length === 0) {
       return res.status(400).json({ msg: "Post has not yet been disliked" });
     }
 
     // Get remove index
-    const removeIndex = post.dislikes
-      .map(dislike => dislike.user.toString())
-      .indexOf(req.user.id);
+    const removeIndex = post.dislikes.map(dislike => dislike.user.toString()).indexOf(req.user.id);
 
     post.dislikes.splice(removeIndex, 1);
 
     await post.save();
+
+    post = await Post.findById(req.params.id).populate("dislikes.user", [
+      "name",
+      "username",
+      "avatar"
+    ]);
 
     res.json(post.dislikes);
   } catch (err) {
@@ -360,9 +375,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // Pull out comment
-    const comment = post.comments.find(
-      comment => comment.id === req.params.comment_id
-    );
+    const comment = post.comments.find(comment => comment.id === req.params.comment_id);
 
     // Make sure comment exists
     if (!comment) {
@@ -375,9 +388,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     }
 
     // Get remove index
-    const removeIndex = post.comments
-      .map(comment => comment.id)
-      .indexOf(req.params.comment_id);
+    const removeIndex = post.comments.map(comment => comment.id).indexOf(req.params.comment_id);
 
     post.comments.splice(removeIndex, 1);
 
@@ -439,7 +450,7 @@ router.put("/unbookmark/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    const user = await User.findById(req.user.id);
+    let user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ msg: "User is not found" });
     }
@@ -454,6 +465,8 @@ router.put("/unbookmark/:id", auth, async (req, res) => {
     user.bookmarks.splice(removeIndex, 1);
 
     await user.save();
+
+    user = await User.findById(req.user.id).populate("bookmarks.post");
 
     res.json(user.bookmarks);
   } catch (err) {

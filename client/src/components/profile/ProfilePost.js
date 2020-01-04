@@ -24,7 +24,8 @@ import {
   removeLike,
   addDislike,
   removeDislike,
-  addBokmark
+  addBookmark,
+  removeBookmark
 } from '../../store/actions/post';
 
 const ProfilePost = ({
@@ -34,10 +35,13 @@ const ProfilePost = ({
   removeLike,
   addDislike,
   removeDislike,
-  addBokmark,
+  addBookmark,
+  removeBookmark,
   bookmarks
 }) => {
   const [showLikesModal, setShowLikesModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [modalTitle, setModalTitle] = useState('');
 
   return (
     <Fragment>
@@ -125,7 +129,7 @@ const ProfilePost = ({
         <div className="mt-2 d-flex justify-content-between">
           <div>
             {!auth.loading &&
-            post.likes.filter(like => like.user === auth.user._id).length >
+            post.likes.filter(like => like.user._id === auth.user._id).length >
               0 ? (
               <button
                 className="btn text-secondary"
@@ -141,14 +145,19 @@ const ProfilePost = ({
                 <FontAwesomeIcon icon={faThumbsUp} />
               </button>
             )}
-            <a className="text-decoration-none text-secondary" href="#!">
-              <small className="ml-2" onClick={() => setShowLikesModal(true)}>
+            <button className="btn text-decoration-none text-secondary">
+              <small
+                onClick={() => {
+                  setModalData(post.likes);
+                  setModalTitle('Likes');
+                  setShowLikesModal(true);
+                }}>
                 {post.likes.length}
               </small>
-            </a>
+            </button>
 
             {!auth.loading &&
-            post.dislikes.filter(dislike => dislike.user === auth.user._id)
+            post.dislikes.filter(dislike => dislike.user._id === auth.user._id)
               .length > 0 ? (
               <button
                 className="btn text-secondary"
@@ -164,9 +173,15 @@ const ProfilePost = ({
                 <FontAwesomeIcon icon={faThumbsDown} />
               </button>
             )}
-            <a className="text-decoration-none text-secondary" href="#!">
-              <small className="ml-2">{post.dislikes.length}</small>
-            </a>
+            <button
+              className="btn text-decoration-none text-secondary cursor-pointer"
+              onClick={() => {
+                setModalData(post.dislikes);
+                setModalTitle('Dislikes');
+                setShowLikesModal(true);
+              }}>
+              <small>{post.dislikes.length}</small>
+            </button>
             <span className="text-decoration-none text-secondary ml-4">
               <FontAwesomeIcon className="align-middle" icon={faEye} />
             </span>
@@ -180,22 +195,20 @@ const ProfilePost = ({
             bookmarks &&
             bookmarks.filter(bookmark => bookmark.post._id === post._id)
               .length > 0 ? (
-              <a
-                className="text-decoration-none text-secondary"
-                href="#!"
-                onClick={() => addBokmark(post._id)}>
+              <button
+                className="btn text-decoration-none text-secondary"
+                onClick={() => removeBookmark(post._id)}>
                 <FontAwesomeIcon
                   className="align-middle"
                   icon={faBookmarkSolid}
                 />
-              </a>
+              </button>
             ) : (
-              <a
-                className="text-decoration-none text-secondary"
-                href="#!"
-                onClick={() => addBokmark(post._id)}>
+              <button
+                className="btn text-decoration-none text-secondary"
+                onClick={() => addBookmark(post._id)}>
                 <FontAwesomeIcon className="align-middle" icon={faBookmark} />
-              </a>
+              </button>
             )}
             <a className="text-decoration-none text-secondary ml-4" href="#!">
               <FontAwesomeIcon className="align-middle" icon={faShare} />
@@ -205,6 +218,8 @@ const ProfilePost = ({
       </div>
       <LikesModal
         show={showLikesModal}
+        title={modalTitle}
+        data={modalData}
         onHide={() => setShowLikesModal(false)}
       />
     </Fragment>
@@ -221,5 +236,6 @@ export default connect(mapStateToProps, {
   removeLike,
   addDislike,
   removeDislike,
-  addBokmark
+  addBookmark,
+  removeBookmark
 })(ProfilePost);

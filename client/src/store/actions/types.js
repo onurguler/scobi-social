@@ -32,3 +32,4 @@ export const UPDATE_BOOKMARKS = 'UPDATE_BOOKMARKS';
 export const GET_SCOBS = 'GET_SCOBS';
 export const ADD_SCOB = 'ADD_SCOB';
 export const DELETE_SCOB = 'DELETE_SCOB';
+export const GET_CURRENT_PROFILE = 'GET_CURRENT_PROFILE';
