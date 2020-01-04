@@ -19,11 +19,6 @@ const Footer = () => {
             </Link>
 
             <div className="d-flex align-items-center">
-              <Link className="text-decoration-none" to="/AboutUs">
-                <span className="align-middle text-teal-100 mr-4">
-                  About Us
-                </span>
-              </Link>
               <Link className="text-decoration-none" to="/Contact">
                 <span className="align-middle text-teal-100">Contact</span>
               </Link>

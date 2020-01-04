@@ -153,18 +153,6 @@ function Contact({ history }) {
                     Suleyman Demirel Cd., 32260 Merkez/Isparta
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col-sm-3 mt-3">
-                    <i class="fa fa-envelope"></i>   Email
-                  </div>
-                  <div class="col-sm-9">
-                    <a href="mailto:info@yourdomain.com">info@yourdomain.com</a>{' '}
-                    <br />{' '}
-                    <a href="mailto:support@yourdomain.com">
-                      support@yourdomain.com
-                    </a>
-                  </div>
-                </div>
                 <br />
                 <iframe
                   title="abc"

@@ -65,11 +65,11 @@ const Login = ({ isAuthenticated, login, two_fa }) => {
               />
             </Form.Group>
 
-            <FormGroup>
+            {/* <FormGroup>
               <a className="d-block mb-3" href="#!">
                 Forgot Password?
               </a>
-            </FormGroup>
+            </FormGroup> */}
 
             <Button className="w-50" variant="primary" type="submit">
               LOG IN

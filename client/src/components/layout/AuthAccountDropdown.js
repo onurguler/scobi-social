@@ -51,12 +51,12 @@ const AuthAccountDropdown = ({ auth, logout }) => {
               Posts
             </Link>
             <div class="dropdown-divider"></div>
-            <Link className="dropdown-item" to="/profile">
+            <Link className="dropdown-item" to={`/@${auth.user.username}`}>
               Bookmarks
             </Link>
             <div class="dropdown-divider"></div>
-            <Link className="dropdown-item" to={`/@${auth.user.username}`}>
-              Profile
+            <Link className="dropdown-item" to="/Contact">
+              Contact
             </Link>
             <Link className="dropdown-item" to="/settings">
               Settings
