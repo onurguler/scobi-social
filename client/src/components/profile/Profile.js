@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getProfileByUsername } from '../../store/actions/profile';
 import { getUsersPosts, getUsersBookmarks } from '../../store/actions/post';
+import { getUsersScobs } from '../../store/actions/scob';
 
 const Profile = ({
   match,
@@ -16,13 +17,18 @@ const Profile = ({
   profile,
   auth,
   post,
-  getUsersPosts
+  getUsersPosts,
+  getUsersScobs,
+  getUsersBookmarks,
+  scob
 }) => {
   useEffect(() => {
     const username = match.params.username;
     if (username) {
       getProfileByUsername(username);
       getUsersPosts(username);
+      getUsersScobs(username);
+      getUsersBookmarks();
     }
   }, [getProfileByUsername, match.params, getUsersPosts, getUsersBookmarks]);
   const [showPosts, setShowPosts] = useState(true);
@@ -32,13 +38,18 @@ const Profile = ({
   return (
     <div className="flex d-flex flex-column align-items-center profile min-vh-100">
       {!profile.loading && !post.loading && (
-        <ProfileTop profile={profile.profile} posts={post.posts} />
+        <Fragment>
+          <ProfileTop profile={profile.profile} posts={post.posts} />
+          <ProfileNav
+            profile={profile.profile}
+            auth={auth}
+            setShowPosts={setShowPosts}
+            setShowScobs={setShowScobs}
+            setShowBookmarks={setShowBookmarks}
+          />
+        </Fragment>
       )}
-      <ProfileNav
-        setShowPosts={setShowPosts}
-        setShowScobs={setShowScobs}
-        setShowBookmarks={setShowBookmarks}
-      />
+
       {showPosts && (
         <Fragment>
           {!post.loading && post.posts.map(post => <ProfilePost post={post} />)}
@@ -46,9 +57,13 @@ const Profile = ({
       )}
       {showScobs && (
         <Fragment>
-          <NewScob />
-          <ProfileScob />
-          <ProfileScob />
+          {!profile.loading &&
+            profile.profile.user &&
+            auth.user &&
+            profile.profile.user.username === auth.user.username && (
+              <NewScob profile={profile.profile} />
+            )}
+          {!scob.loading && scob.scobs.map(scob => <ProfileScob scob={scob} />)}
         </Fragment>
       )}
       {showBookmarks && (
@@ -69,16 +84,20 @@ Profile.propTypes = {
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   post: PropTypes.object.isRequired,
-  getUsersBookmarks: PropTypes.func.isRequired
+  getUsersBookmarks: PropTypes.func.isRequired,
+  getUsersScobs: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   profile: state.profile,
   auth: state.auth,
-  post: state.post
+  post: state.post,
+  scob: state.scob
 });
 
 export default connect(mapStateToProps, {
   getProfileByUsername,
-  getUsersPosts
+  getUsersPosts,
+  getUsersScobs,
+  getUsersBookmarks
 })(Profile);

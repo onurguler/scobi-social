@@ -91,7 +91,8 @@ passport.use(
           username,
           email,
           password,
-          avatar
+          avatar,
+          two_fa: false
         });
 
         const salt = await bcrypt.genSalt(10);
@@ -146,7 +147,8 @@ passport.use(
           name,
           email,
           password,
-          avatar
+          avatar,
+          two_fa: false
         });
 
         const salt = await bcrypt.genSalt(10);

@@ -81,7 +81,7 @@ export const addLike = id => async dispatch => {
 };
 
 // Add Bookmark
-export const addBokmark = id => async dispatch => {
+export const addBookmark = id => async dispatch => {
   try {
     const { data } = await axios.put(`/api/posts/bookmark/${id}`);
 
@@ -91,6 +91,19 @@ export const addBokmark = id => async dispatch => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const removeBookmark = id => async dispatch => {
+  try {
+    const { data } = await axios.put(`/api/posts/unbookmark/${id}`);
+
+    dispatch({
+      type: UPDATE_BOOKMARKS,
+      payload: data
+    });
+  } catch (error) {
+    console.error(error);
   }
 };
 

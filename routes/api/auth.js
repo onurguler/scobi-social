@@ -18,7 +18,7 @@ const auth = require("../../middleware/auth");
 router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id)
-      .select("-password")
+      .select("-password -bookmarks")
       .populate("notifications.post", ["title"]);
     return res.json(user);
   } catch (err) {
@@ -32,7 +32,10 @@ router.get("/", auth, async (req, res) => {
 // @access  Public
 router.post(
   "/",
-  [check("email", "Please enter a valid email").isEmail(), check("password", "Password is required").exists()],
+  [
+    check("email", "Please enter a valid email").isEmail(),
+    check("password", "Password is required").exists()
+  ],
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -55,7 +58,7 @@ router.post(
         return res.status(400).json({ errors: [{ msg: "Invalid credentials. " }] });
       }
 
-      if (user.two_fa) {
+      if (user.two_fa === true) {
         return res.json({ two_fa: user.two_fa, user: { id: user.id } });
       }
 
@@ -81,7 +84,10 @@ router.post(
 router.get(
   "/google",
   passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"]
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
   })
 );
 

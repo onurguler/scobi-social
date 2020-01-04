@@ -6,25 +6,27 @@ import PropTypes from 'prop-types';
 
 const PostCard = ({ post }) => {
   return (
-    <Link
-      to="/posts"
-      className="mb-2 border rounded-lg px-4 py-4 bg-white profile-post shadow-sm mx-auto text-decoration-none text-gray-900">
-      <div className="d-flex justify-content-between align-items-start">
-        <span className="leading-tight text-decoration-none text-gray-800 mr-2 mb-2">
-          {post && post.title}
-        </span>
+    post && (
+      <Link
+        to={`/posts/${post._id}`}
+        className="mb-2 border rounded-lg px-4 py-4 bg-white profile-post shadow-sm mx-auto text-decoration-none text-gray-900">
+        <div className="d-flex justify-content-between align-items-start">
+          <span className="leading-tight text-decoration-none text-gray-800 mr-2 mb-2">
+            {post && post.title}
+          </span>
 
-        <div className="d-flex">
-          <p className="text-decoration-none text-gray-600 mr-1">
-            <FontAwesomeIcon icon={faComment} />
-          </p>
-          <span className="text-sm">{post && post.comments.length}</span>
+          <div className="d-flex">
+            <p className="text-decoration-none text-gray-600 mr-1">
+              <FontAwesomeIcon icon={faComment} />
+            </p>
+            <span className="text-sm">{post && post.comments.length}</span>
+          </div>
         </div>
-      </div>
-      <span className="text-decoration-none text-gray-600">
-        {post && post.name}
-      </span>
-    </Link>
+        <span className="text-decoration-none text-gray-600">
+          {post && post.name}
+        </span>
+      </Link>
+    )
   );
 };
 

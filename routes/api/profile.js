@@ -14,7 +14,7 @@ router.get("/me", auth, async (req, res) => {
   try {
     const profile = await Profile.findOne({
       user: req.user.id
-    }).populate("user", ["name", "username", "avatar"]);
+    }).populate("user", ["name", "username", "avatar", "bookmarks", "bookmarks.post"]);
 
     if (!profile) {
       return res.status(400).json({ msg: "There is no profile for this user" });
@@ -72,7 +72,9 @@ router.put("/follow/:username", auth, async (req, res) => {
     const sourceUser = await User.findById(req.user.id);
     const target = await Profile.findOne({ user: user.id });
 
-    if (source.following.filter(userDb => userDb.user.toString() === user.id.toString()).length > 0) {
+    if (
+      source.following.filter(userDb => userDb.user.toString() === user.id.toString()).length > 0
+    ) {
       return res.status(400).json({ errors: [{ msg: "User Already Following" }] });
     }
 
@@ -116,13 +118,19 @@ router.put("/unfollow/:username", auth, async (req, res) => {
     const source = await Profile.findOne({ user: req.user.id });
     const target = await Profile.findOne({ user: user.id });
 
-    if (source.following.filter(userDb => userDb.user.toString() === user.id.toString()).length === 0) {
+    if (
+      source.following.filter(userDb => userDb.user.toString() === user.id.toString()).length === 0
+    ) {
       return res.status(400).json({ errors: [{ msg: "Not Yet Been Following" }] });
     }
 
-    const removeIndexFollowing = source.following.map(follow => follow.user.toString()).indexOf(user.id);
+    const removeIndexFollowing = source.following
+      .map(follow => follow.user.toString())
+      .indexOf(user.id);
 
-    const removeIndexFollowers = target.followers.map(follower => follower.user.toString()).indexOf(req.user.id);
+    const removeIndexFollowers = target.followers
+      .map(follower => follower.user.toString())
+      .indexOf(req.user.id);
 
     source.following.splice(removeIndexFollowing, 1);
     target.followers.splice(removeIndexFollowers, 1);
