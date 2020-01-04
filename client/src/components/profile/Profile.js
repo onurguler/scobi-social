@@ -57,7 +57,12 @@ const Profile = ({
       )}
       {showScobs && (
         <Fragment>
-          <NewScob profile={profile.profile} />
+          {!profile.loading &&
+            profile.profile.user &&
+            auth.user &&
+            profile.profile.user.username === auth.user.username && (
+              <NewScob profile={profile.profile} />
+            )}
           {!scob.loading && scob.scobs.map(scob => <ProfileScob scob={scob} />)}
         </Fragment>
       )}

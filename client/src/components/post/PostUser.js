@@ -2,11 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  // eslint-disable-next-line
-  faThumbsUp as faThumbsUpSolid,
-  // eslint-disable-next-line
-  faThumbsDown as faThumbsDownSolid,
-  // eslint-disable-next-line
   faBookmark as faBookmarkSolid,
   faShare
 } from '@fortawesome/free-solid-svg-icons';

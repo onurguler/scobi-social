@@ -6,6 +6,7 @@ const auth = require("../../middleware/auth");
 const Post = require("../../models/Post");
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const Bookmark = require("../../models/Bookmark");
 
 const requestIp = require("request-ip");
 const externalIp = require("externalip");
@@ -155,6 +156,12 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(401).json({ msg: "User not authorized" });
     }
 
+    // const users = await User.find({ bookmarks: { post: post.id } });
+
+    // console.log(users);
+
+    const bookmarks = await Bookmark.find({ post: post.id });
+    bookmarks.map(async bookmark => await bookmark.remove());
     await post.remove();
 
     res.json({ msg: "Post removed" });
@@ -383,18 +390,17 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     }
 
     // Check user
-    if (comment.user.toString() !== req.user.id) {
+    if (comment.user.toString() === req.user.id || post.user.toString() === req.user.id) {
+      // Get remove index
+      const removeIndex = post.comments.map(comment => comment.id).indexOf(req.params.comment_id);
+
+      post.comments.splice(removeIndex, 1);
+
+      await post.save();
+      return res.json(post.comments);
+    } else {
       return res.status(401).json({ msg: "User not authorized" });
     }
-
-    // Get remove index
-    const removeIndex = post.comments.map(comment => comment.id).indexOf(req.params.comment_id);
-
-    post.comments.splice(removeIndex, 1);
-
-    await post.save();
-
-    res.json(post.comments);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -403,13 +409,12 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
 
 router.get("/user/get/bookmarks", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).populate("bookmarks.post");
-
-    if (!user) {
-      return res.status(400).json({ errors: [{ msg: "User not found" }] });
+    const bookmarks = await Bookmark.find({ user: req.user.id }).populate("post");
+    if (!bookmarks) {
+      return res.status(400).json({ errors: [{ msg: "Bookmarks not found" }] });
     }
 
-    res.json(user.bookmarks);
+    res.json(bookmarks);
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
@@ -425,22 +430,13 @@ router.put("/bookmark/:id", auth, async (req, res) => {
       return res.status(404).json({ msg: "Post not found" });
     }
 
-    let user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ msg: "User is not found" });
-    }
+    const bookmark = new Bookmark({ user: req.user.id, post: post.id });
 
-    if (user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id).length > 0) {
-      return res.status(400).json({ msg: "Post already bookmarked" });
-    }
+    await bookmark.save();
 
-    user.bookmarks.unshift({ post: post.id });
+    const bookmarks = await Bookmark.find({ user: req.user.id }).populate("post");
 
-    await user.save();
-
-    user = await User.findById(req.user.id).populate("bookmarks.post");
-
-    return res.json(user.bookmarks);
+    res.json(bookmarks);
   } catch (error) {
     console.log(error);
   }
@@ -450,25 +446,22 @@ router.put("/unbookmark/:id", auth, async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
-    let user = await User.findById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ msg: "User is not found" });
+    // Check for ObjectId format and post
+    if (!req.params.id.match(/^[0-9a-fA-F]{24}$/) || !post) {
+      return res.status(404).json({ msg: "Post not found" });
     }
 
-    if (user.bookmarks.filter(bookmark => bookmark.post.toString() === post.id).length === 0) {
-      return res.status(400).json({ msg: "Post has not yet been bookmarked" });
+    const bookmark = await Bookmark.findOne({ user: req.user.id, post: post.id });
+
+    if (!bookmark) {
+      return res.status(404).json({ msg: "Bookmark is not found" });
     }
 
-    // Get remove index
-    const removeIndex = user.bookmarks.map(bookmark => bookmark.post.toString()).indexOf(post.id);
+    await bookmark.remove();
 
-    user.bookmarks.splice(removeIndex, 1);
+    const bookmarks = await Bookmark.find({ user: req.user.id }).populate("post");
 
-    await user.save();
-
-    user = await User.findById(req.user.id).populate("bookmarks.post");
-
-    res.json(user.bookmarks);
+    res.json(bookmarks);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

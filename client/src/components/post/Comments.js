@@ -23,7 +23,9 @@ const Comments = ({ post, match, getPost, auth }) => {
           <NewComment user={auth.user && auth.user} post_id={post._id} />
         )}
         {post &&
-          post.comments.map(comment => <CommentCard comment={comment} />)}
+          post.comments.map(comment => (
+            <CommentCard comment={comment} post={post} />
+          ))}
       </div>
     </div>
   );
