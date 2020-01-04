@@ -13,6 +13,8 @@ import {
   GET_TOKEN
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
+import { getCurrentProfile } from './profile';
+import { getUsersBookmarks } from './post';
 
 // Load User
 export const loadUser = () => async dispatch => {
@@ -27,6 +29,10 @@ export const loadUser = () => async dispatch => {
       type: USER_LOADED,
       payload: res.data
     });
+
+    dispatch(getCurrentProfile());
+
+    dispatch(getUsersBookmarks());
   } catch (err) {
     dispatch({
       type: AUTH_ERROR

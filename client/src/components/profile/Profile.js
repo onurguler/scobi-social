@@ -19,6 +19,7 @@ const Profile = ({
   post,
   getUsersPosts,
   getUsersScobs,
+  getUsersBookmarks,
   scob
 }) => {
   useEffect(() => {
@@ -27,6 +28,7 @@ const Profile = ({
       getProfileByUsername(username);
       getUsersPosts(username);
       getUsersScobs(username);
+      getUsersBookmarks();
     }
   }, [getProfileByUsername, match.params, getUsersPosts, getUsersBookmarks]);
   const [showPosts, setShowPosts] = useState(true);
@@ -36,13 +38,18 @@ const Profile = ({
   return (
     <div className="flex d-flex flex-column align-items-center profile min-vh-100">
       {!profile.loading && !post.loading && (
-        <ProfileTop profile={profile.profile} posts={post.posts} />
+        <Fragment>
+          <ProfileTop profile={profile.profile} posts={post.posts} />
+          <ProfileNav
+            profile={profile.profile}
+            auth={auth}
+            setShowPosts={setShowPosts}
+            setShowScobs={setShowScobs}
+            setShowBookmarks={setShowBookmarks}
+          />
+        </Fragment>
       )}
-      <ProfileNav
-        setShowPosts={setShowPosts}
-        setShowScobs={setShowScobs}
-        setShowBookmarks={setShowBookmarks}
-      />
+
       {showPosts && (
         <Fragment>
           {!post.loading && post.posts.map(post => <ProfilePost post={post} />)}
@@ -86,5 +93,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps, {
   getProfileByUsername,
   getUsersPosts,
-  getUsersScobs
+  getUsersScobs,
+  getUsersBookmarks
 })(Profile);
