@@ -52,7 +52,7 @@ router.post(
 
       const avatar = gravatar.url(email, { s: "200", r: "pg", d: "mm" });
 
-      user = User({ name, username, email, password, avatar, two_fa: true });
+      user = User({ name, username, email, password, avatar, two_fa: false });
 
       const salt = await bcrypt.genSalt(10);
 
