@@ -45,12 +45,14 @@ router.post(
       if (user) {
         const propsedName = await generateUniqueUsername(username);
 
-        return res.status(400).json({ errors: [{ msg: "Username already taken. You can try " + propsedName }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Username already taken. You can try " + propsedName }] });
       }
 
       const avatar = gravatar.url(email, { s: "200", r: "pg", d: "mm" });
 
-      user = User({ name, username, email, password, avatar, two_fa: false });
+      user = User({ name, username, email, password, avatar, two_fa: true });
 
       const salt = await bcrypt.genSalt(10);
 
