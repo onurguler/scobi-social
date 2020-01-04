@@ -39,7 +39,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         two_fa: payload.two_fa,
-        user: payload.user
+        user: payload.user,
+        loading: true
       };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:

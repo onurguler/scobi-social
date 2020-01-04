@@ -7,6 +7,7 @@ import signin from '../../assets/img/signin.jpg';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login } from '../../store/actions/auth';
+import Alert from '../layout/Alert';
 
 const Login = ({ isAuthenticated, login, two_fa }) => {
   const [formData, setFormData] = useState({
@@ -40,6 +41,8 @@ const Login = ({ isAuthenticated, login, two_fa }) => {
 
         <Col className="justify-content-center mx-auto vertical-center p-5">
           <Form className="login-form text-center" onSubmit={e => onSubmit(e)}>
+            <Alert />
+
             <h3 className="mb-5">Login to continue</h3>
 
             <Form.Group controlId="formBasicEmail">
@@ -62,14 +65,6 @@ const Login = ({ isAuthenticated, login, two_fa }) => {
               />
             </Form.Group>
 
-            {/* <Form.Group className="text-left" controlId="formBasicCheckbox">
-              <Form.Check
-                name="rememberMe"
-                type="checkbox"
-                label="Remember me"
-              />
-            </Form.Group> */}
-
             <FormGroup>
               <a className="d-block mb-3" href="#!">
                 Forgot Password?
@@ -83,7 +78,11 @@ const Login = ({ isAuthenticated, login, two_fa }) => {
             <Form.Text className="text-muted mt-4">or sign in using</Form.Text>
 
             <Button id="facebook" variant="default">
-              <FontAwesomeIcon icon={faFacebook} size="2x" />
+              <a
+                className="text-decoration-none"
+                href="http://scobi.social/api/auth/google">
+                <FontAwesomeIcon icon={faFacebook} size="2x" />
+              </a>
             </Button>
 
             <Button id="google" variant="default">

@@ -3,10 +3,12 @@ import alert from './alert';
 import auth from './auth';
 import profile from './profile';
 import post from './post';
+import scob from './scob';
 
 export default combineReducers({
   alert,
   auth,
   profile,
-  post
+  post,
+  scob
 });

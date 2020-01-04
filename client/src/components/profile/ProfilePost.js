@@ -1,13 +1,11 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEllipsisH,
-  // eslint-disable-next-line
   faThumbsUp as faThumbsUpSolid,
-  // eslint-disable-next-line
   faThumbsDown as faThumbsDownSolid,
-  // eslint-disable-next-line
   faBookmark as faBookmarkSolid,
   faShare,
   faEye
@@ -17,7 +15,9 @@ import {
   faThumbsDown,
   faBookmark
 } from '@fortawesome/free-regular-svg-icons';
+
 import LikesModal from '../post/LikesModal';
+
 import { connect } from 'react-redux';
 import {
   addLike,
@@ -51,6 +51,7 @@ const ProfilePost = ({
               height="50"
               alt=""
             />
+
             <div className="ml-3">
               <div className="font-weight-bold">{post.name}</div>
               <div>
@@ -91,7 +92,7 @@ const ProfilePost = ({
           </div>
         </div>
         {post.cover && (
-          <Link to="/posts">
+          <Link to={`/posts/${post._id}`}>
             <img
               className="img-fluid mt-2 fit-image"
               src={post.cover}
@@ -102,21 +103,21 @@ const ProfilePost = ({
         )}
 
         <Link
-          to="/posts"
+          to={`/posts/${post._id}`}
           className="text-2xl font-bold leading-tight truncate-2-lines mt-2 text-decoration-none text-gray-900 mb-2">
           {post.title}
         </Link>
 
         {post.subtitle && (
           <Link
-            to="/posts"
+            to={`/posts/${post._id}`}
             className="text-gray-600 truncate-2-lines text-decoration-none mb-2">
             {post.subtitle}
           </Link>
         )}
 
         <Link
-          to="/posts"
+          to={`/posts/${post._id}`}
           className="text-decoration-none text-gray-600 text-sm">
           Read more...
         </Link>
@@ -166,12 +167,12 @@ const ProfilePost = ({
             <a className="text-decoration-none text-secondary" href="#!">
               <small className="ml-2">{post.dislikes.length}</small>
             </a>
-            <a className="text-decoration-none text-secondary ml-4" href="#!">
+            <span className="text-decoration-none text-secondary ml-4">
               <FontAwesomeIcon className="align-middle" icon={faEye} />
-            </a>
-            <a className="text-decoration-none text-secondary" href="#!">
+            </span>
+            <span className="text-decoration-none text-secondary" href="#!">
               <small className="ml-2">{post.views && post.views.length}</small>
-            </a>
+            </span>
           </div>
 
           <div>

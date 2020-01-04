@@ -2,21 +2,25 @@ import React, { Fragment, useState } from 'react';
 import { Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { faFacebook, faGooglePlus } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import signin from '../../assets/img/signin.jpg';
+import Alert from '../layout/Alert';
+import PropTypes from 'prop-types';
 
-const Signup = () => {
+import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { setAlert } from '../../store/actions/alert';
+import { register } from '../../store/actions/auth';
+
+const Signup = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: '',
-    surname: '',
+    username: '',
     email: '',
     password: '',
-    password2: '',
-    birth: new Date()
+    password2: ''
   });
 
-  const { name, surname, email, password, password2, birth } = formData;
+  const { name, username, email, password, password2 } = formData;
 
   const onChange = e =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,8 +28,17 @@ const Signup = () => {
   const onSubmit = e => {
     e.preventDefault();
 
-    console.log(name, surname, email, password, password2, birth);
+    if (password !== password2) {
+      setAlert('Passwords do not match', 'danger');
+    } else {
+      register({ name, username, email, password });
+    }
+    console.log(name, email, password, password2);
   };
+
+  if (isAuthenticated) {
+    return <Redirect to="/" />;
+  }
 
   return (
     <Fragment>
@@ -39,6 +52,7 @@ const Signup = () => {
 
         <Col lg={8} className="justify-content-center vertical-center">
           <Form className="login-form text-center" onSubmit={e => onSubmit(e)}>
+            <Alert />
             <h3 className="mb-5">
               By having a Scobio account, you can also create, vote, and comment
               on content.
@@ -56,15 +70,17 @@ const Signup = () => {
                   />
                 </Form.Group>
               </Col>
+            </Form.Row>
 
+            <Form.Row>
               <Col>
-                <Form.Group controlId="formBasicSurname">
+                <Form.Group controlId="formBasicName">
                   <Form.Control
-                    value={surname}
+                    value={username}
                     onChange={e => onChange(e)}
-                    name="surname"
+                    name="username"
                     type="text"
-                    placeholder="Surname"
+                    placeholder="Username"
                   />
                 </Form.Group>
               </Col>
@@ -101,26 +117,6 @@ const Signup = () => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Row>
-                <Col className="align-self-center">
-                  <Form.Label>Birth Date</Form.Label>
-                </Col>
-
-                <Col>
-                  <DatePicker
-                    className="ml-3 date-picker"
-                    selected={birth}
-                    onChange={date => setFormData({ ...formData, birth: date })}
-                    peekNextMonth
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                  />
-                </Col>
-              </Form.Row>
-            </Form.Group>
-
-            <Form.Group>
               <p>
                 Already a Scober? <a href="#!"> LOG IN</a>
               </p>
@@ -146,4 +142,14 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+Signup.propTypes = {
+  setAlert: PropTypes.func.isRequired,
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { setAlert, register })(Signup);

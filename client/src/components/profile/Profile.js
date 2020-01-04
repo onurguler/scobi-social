@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getProfileByUsername } from '../../store/actions/profile';
 import { getUsersPosts, getUsersBookmarks } from '../../store/actions/post';
+import { getUsersScobs } from '../../store/actions/scob';
 
 const Profile = ({
   match,
@@ -16,13 +17,16 @@ const Profile = ({
   profile,
   auth,
   post,
-  getUsersPosts
+  getUsersPosts,
+  getUsersScobs,
+  scob
 }) => {
   useEffect(() => {
     const username = match.params.username;
     if (username) {
       getProfileByUsername(username);
       getUsersPosts(username);
+      getUsersScobs(username);
     }
   }, [getProfileByUsername, match.params, getUsersPosts, getUsersBookmarks]);
   const [showPosts, setShowPosts] = useState(true);
@@ -46,9 +50,8 @@ const Profile = ({
       )}
       {showScobs && (
         <Fragment>
-          <NewScob />
-          <ProfileScob />
-          <ProfileScob />
+          <NewScob profile={profile.profile} />
+          {!scob.loading && scob.scobs.map(scob => <ProfileScob scob={scob} />)}
         </Fragment>
       )}
       {showBookmarks && (
@@ -69,16 +72,19 @@ Profile.propTypes = {
   profile: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   post: PropTypes.object.isRequired,
-  getUsersBookmarks: PropTypes.func.isRequired
+  getUsersBookmarks: PropTypes.func.isRequired,
+  getUsersScobs: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   profile: state.profile,
   auth: state.auth,
-  post: state.post
+  post: state.post,
+  scob: state.scob
 });
 
 export default connect(mapStateToProps, {
   getProfileByUsername,
-  getUsersPosts
+  getUsersPosts,
+  getUsersScobs
 })(Profile);
