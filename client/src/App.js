@@ -15,6 +15,7 @@ import Post from './components/post/Post';
 import Footer from './components/layout/Footer';
 import Comments from './components/post/Comments';
 import Privacy from './components/layout/Privacy';
+import PrivateRoute from './components/layout/PrivateRoute';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -48,7 +49,7 @@ const App = () => {
             <Route exact path="/profile/edit" component={ProfileEdit} />
             <Route exact path="/profile/edit/:option" component={ProfileEdit} />
             <Route exact path="/new-post" component={NewPost} />
-            <Route exact path="/settings" component={Settings} />
+            <PrivateRoute exact path="/settings" component={Settings} />
             <Route exact path="/contact" component={Contact} />
             <Route exact path="/posts/:post_id" component={Post} />
             <Route exact path="/posts/:post_id/comments" component={Comments} />
