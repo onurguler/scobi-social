@@ -1,6 +1,12 @@
 import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import {
+  enableTwoFactorAuth,
+  disableTwoFactorAuth
+} from '../../../store/actions/auth';
+import PropTypes from 'prop-types';
 
-const Education = () => {
+const Privacy = ({ auth, enableTwoFactorAuth, disableTwoFactorAuth }) => {
   return (
     <Fragment>
       <h1 className="border-bottom pb-3">Privacy & Security</h1>
@@ -10,10 +16,23 @@ const Education = () => {
       <div className="text-gray-800 mt-2 border-bottom pb-4">
         <span>Your password: </span>************
       </div>
-      <div className="font-bold text-lg mt-4">Enable 2FA</div>
-      <div className="text-gray-800 mt-2 border-bottom pb-4">
-        aaaaaaaaaaaaaaaaaaa
+      <div className="mt-4 d-flex justify-content-between">
+        <div className="font-bold text-lg">Enable 2FA</div>
+        {auth.user && auth.user.two_fa ? (
+          <button
+            className="btn btn-outline-green-500"
+            onClick={() => disableTwoFactorAuth()}>
+            Disable
+          </button>
+        ) : (
+          <button
+            className="btn btn-outline-green-500"
+            onClick={() => enableTwoFactorAuth()}>
+            Enable
+          </button>
+        )}
       </div>
+
       <div className="font-bold text-lg mt-4">Deactivate account</div>
       <div className="text-gray-800 mt-2">
         Deactivating your account will remove it from Scobio within a few
@@ -44,4 +63,18 @@ const Education = () => {
   );
 };
 
-export default Education;
+Privacy.propTypes = {
+  auth: PropTypes.object.isRequired,
+  enableTwoFactorAuth: PropTypes.func.isRequired,
+  disableTwoFactorAuth: PropTypes.func.isRequired
+};
+
+const mapStateToProps = state => {
+  const { auth } = state;
+  return { auth };
+};
+
+export default connect(mapStateToProps, {
+  enableTwoFactorAuth,
+  disableTwoFactorAuth
+})(Privacy);

@@ -10,7 +10,8 @@ import {
   LOGOUT,
   CLEAR_PROFILE,
   REDIRECT_TWO_FA,
-  GET_TOKEN
+  GET_TOKEN,
+  UPDATE_TWO_FA
 } from './types';
 import setAuthToken from '../../utils/setAuthToken';
 import { getCurrentProfile } from './profile';
@@ -180,4 +181,42 @@ export const login_2fa = (secret, token, user_id) => async dispatch => {
 export const logout = () => dispatch => {
   // dispatch({ type: CLEAR_PROFILE });
   dispatch({ type: LOGOUT });
+};
+
+export const enableTwoFactorAuth = () => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ two_fa: true });
+  try {
+    await axios.post('/api/settings/two-factor-auth', body, config);
+    dispatch({
+      type: UPDATE_TWO_FA,
+      payload: true
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const disableTwoFactorAuth = () => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  const body = JSON.stringify({ two_fa: false });
+  try {
+    await axios.post('/api/settings/two-factor-auth', body, config);
+    dispatch({
+      type: UPDATE_TWO_FA,
+      payload: false
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };

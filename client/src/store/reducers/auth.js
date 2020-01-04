@@ -8,7 +8,8 @@ import {
   LOGOUT,
   ACCOUNT_DELETED,
   REDIRECT_TWO_FA,
-  GET_TOKEN
+  GET_TOKEN,
+  UPDATE_TWO_FA
 } from '../actions/types';
 
 const initialState = {
@@ -66,6 +67,12 @@ export default function(state = initialState, action) {
         two_fa: null,
         secret: null
       };
+    case UPDATE_TWO_FA: {
+      return {
+        ...state,
+        user: { ...state.user, two_fa: payload }
+      };
+    }
     default:
       return state;
   }
