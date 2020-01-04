@@ -71,7 +71,8 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, cb) => {
       const googleId = profile.id;
-      const verifiedEmail = profile.emails.find(email => email.verified === true) || profile.emails[0];
+      const verifiedEmail =
+        profile.emails.find(email => email.verified === true) || profile.emails[0];
       const email = verifiedEmail.value;
 
       try {
@@ -92,7 +93,7 @@ passport.use(
           email,
           password,
           avatar,
-          two_fa: false
+          two_fa: true
         });
 
         const salt = await bcrypt.genSalt(10);
@@ -132,7 +133,10 @@ passport.use(
       const email = profile.emails[0].value;
 
       try {
-        let user = await User.findOneAndUpdate({ $or: [{ facebookId }, { email }] }, { facebookId });
+        let user = await User.findOneAndUpdate(
+          { $or: [{ facebookId }, { email }] },
+          { facebookId }
+        );
 
         if (user !== null) return cb((err = null), user);
 
@@ -148,7 +152,7 @@ passport.use(
           email,
           password,
           avatar,
-          two_fa: false
+          two_fa: true
         });
 
         const salt = await bcrypt.genSalt(10);
