@@ -409,7 +409,9 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
 
 router.get("/user/get/bookmarks", auth, async (req, res) => {
   try {
-    const bookmarks = await Bookmark.find({ user: req.user.id }).populate("post");
+    const bookmarks = await Bookmark.find({ user: req.user.id })
+      .sort({ date: -1 })
+      .populate("post");
     if (!bookmarks) {
       return res.status(400).json({ errors: [{ msg: "Bookmarks not found" }] });
     }
@@ -434,7 +436,9 @@ router.put("/bookmark/:id", auth, async (req, res) => {
 
     await bookmark.save();
 
-    const bookmarks = await Bookmark.find({ user: req.user.id }).populate("post");
+    const bookmarks = await Bookmark.find({ user: req.user.id })
+      .sort({ date: -1 })
+      .populate("post");
 
     res.json(bookmarks);
   } catch (error) {
@@ -459,7 +463,9 @@ router.put("/unbookmark/:id", auth, async (req, res) => {
 
     await bookmark.remove();
 
-    const bookmarks = await Bookmark.find({ user: req.user.id }).populate("post");
+    const bookmarks = await Bookmark.find({ user: req.user.id })
+      .sort({ date: -1 })
+      .populate("post");
 
     res.json(bookmarks);
   } catch (err) {
