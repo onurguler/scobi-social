@@ -156,10 +156,6 @@ router.delete("/:id", auth, async (req, res) => {
       return res.status(401).json({ msg: "User not authorized" });
     }
 
-    // const users = await User.find({ bookmarks: { post: post.id } });
-
-    // console.log(users);
-
     const bookmarks = await Bookmark.find({ post: post.id });
     bookmarks.map(async bookmark => await bookmark.remove());
     await post.remove();
