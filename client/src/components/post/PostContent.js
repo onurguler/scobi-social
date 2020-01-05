@@ -71,7 +71,7 @@ const PostContent = ({
               <FontAwesomeIcon icon={faThumbsUp} />
             </button>
           )}
-          <a className="text-decoration-none text-secondary" href="#!">
+          <button className="btn text-decoration-none text-secondary">
             <small
               className="ml-2"
               onClick={() => {
@@ -81,7 +81,7 @@ const PostContent = ({
               }}>
               {post && post.likes.length}
             </small>
-          </a>
+          </button>
 
           {!auth.loading &&
           post &&
@@ -101,16 +101,15 @@ const PostContent = ({
               <FontAwesomeIcon icon={faThumbsDown} />
             </button>
           )}
-          <a
-            className="text-decoration-none text-secondary"
-            href="#!"
+          <button
+            className="btn text-decoration-none text-secondary"
             onClick={() => {
               setModalTitle('Dislikes');
               setLikesModalData(post.dislikes);
               setShowLikesModal(true);
             }}>
             <small className="ml-2">{post && post.dislikes.length}</small>
-          </a>
+          </button>
           <a className="text-decoration-none text-secondary ml-4" href="#!">
             <FontAwesomeIcon className="align-middle" icon={faEye} />
           </a>
