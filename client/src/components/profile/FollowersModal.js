@@ -36,9 +36,6 @@ const Followers = ({ show, onHide, title, data }) => {
                 <small className="text-secondary">@{user.user.username}</small>
               </div>
             </Link>
-            <button type="button" class="btn btn-primary btn-sm px-4">
-              Follow
-            </button>
           </div>
         ))}
       </Modal.Body>
