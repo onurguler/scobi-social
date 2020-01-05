@@ -26,17 +26,11 @@ const Home = ({ location, history, post: { posts, loading }, getPosts }) => {
           <div className="col-lg-8">
             {/* <PopularTopics /> */}
             <div className="border-bottom border-gray-400 py-2 mb-4">
-<<<<<<< HEAD
-              <span className="h5 font-weight-bold">Categories</span>
-            </div>
-            {posts.length === 0 && <p>There are no posts yet.</p>}
-=======
               <span className="h5 font-weight-bold">Latest posts on Scobi</span>
             </div>
             {posts.length === 0 && (
               <p className="my-2">There are no posts yet.</p>
             )}
->>>>>>> deploy
             {!loading && posts.map(post => <TopicCard post={post} />)}
           </div>
           <div className="col-lg-4 pl-5">

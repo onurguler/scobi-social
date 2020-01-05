@@ -131,7 +131,7 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
             <Button id="facebook" variant="default">
               <a
                 className="text-decoration-none"
-                href="http://scobi.social/api/auth/google">
+                href="http://scobi.social/api/auth/facebook">
                 <FontAwesomeIcon icon={faFacebook} size="2x" />
               </a>
             </Button>
