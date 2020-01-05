@@ -47,7 +47,7 @@ const TwoFA = ({ auth, getToken, login_2fa }) => {
               <h4>Two Factor Authentication</h4>
             </div>
             <p className="text-center mt-3">
-              Please enter the code generated on Google Authenticatior App
+              Please enter the code that sent to your email.
             </p>
 
             <form

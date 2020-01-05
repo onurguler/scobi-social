@@ -169,7 +169,7 @@ router.post("/totp-generate", async (req, res, next) => {
       secret: secret,
       encoding: "base32"
     }),
-    remaining: 120 - Math.floor((new Date().getTime() / 1000.0) % 30)
+    remaining: 180 - Math.floor((new Date().getTime() / 1000.0) % 30)
   };
 
   // create reusable transporter object using the default SMTP transport
