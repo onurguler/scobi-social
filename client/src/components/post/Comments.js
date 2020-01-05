@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 const Comments = ({ post, match, getPost, auth }) => {
   useEffect(() => {
     getPost(match.params.post_id);
-  }, [match.params]);
+  }, [match.params, getPost]);
   return (
     <div>
       <div className="flex d-flex flex-column align-items-center justify-content-center profile border py-2 bg-white">

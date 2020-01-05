@@ -1,13 +1,6 @@
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEllipsisH,
-  // eslint-disable-next-line
-  faBookmark as faBookmarkSolid,
-  faShare
-} from '@fortawesome/free-solid-svg-icons';
-import { faBookmark } from '@fortawesome/free-regular-svg-icons';
+import { faEllipsisH, faShare } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteScob } from '../../store/actions/scob';

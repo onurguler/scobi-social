@@ -2,12 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEllipsisH,
-  // eslint-disable-next-line
   faThumbsUp as faThumbsUpSolid,
-  // eslint-disable-next-line
   faThumbsDown as faThumbsDownSolid,
-  // eslint-disable-next-line
   faBookmark as faBookmarkSolid,
   faShare,
   faEye

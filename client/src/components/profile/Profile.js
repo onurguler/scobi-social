@@ -30,7 +30,13 @@ const Profile = ({
       getUsersScobs(username);
       getUsersBookmarks();
     }
-  }, [getProfileByUsername, match.params, getUsersPosts, getUsersBookmarks]);
+  }, [
+    getProfileByUsername,
+    match.params,
+    getUsersPosts,
+    getUsersBookmarks,
+    getUsersScobs
+  ]);
   const [showPosts, setShowPosts] = useState(true);
   const [showScobs, setShowScobs] = useState(false);
   const [showBookmarks, setShowBookmarks] = useState(false);

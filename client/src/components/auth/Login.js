@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Row, Col, Image, Form, Button, FormGroup } from 'react-bootstrap';
+import { Row, Col, Image, Form, Button } from 'react-bootstrap';
 import { faFacebook, faGooglePlus } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import signin from '../../assets/img/signin.jpg';

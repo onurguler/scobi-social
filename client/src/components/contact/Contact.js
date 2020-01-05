@@ -19,7 +19,7 @@ function Contact({ history }) {
     e.preventDefault();
 
     try {
-      const res = await axios.post('/api/contact', formData);
+      await axios.post('/api/contact', formData);
       history.push('/');
     } catch (error) {
       console.log(error);

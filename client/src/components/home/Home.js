@@ -1,20 +1,12 @@
 import React, { Fragment, useEffect } from 'react';
-import Trending from './Trending';
-import PopularTopics from './PopularTopics';
 import CategoriesList from './CategoriesList';
 import queryString from 'query-string';
 import TopicCard from '../topic/TopicCard';
 import { connect } from 'react-redux';
-import { getPosts, getUsersBookmarks } from '../../store/actions/post';
+import { getPosts } from '../../store/actions/post';
 import PropTypes from 'prop-types';
 
-const Home = ({
-  location,
-  history,
-  post: { posts, loading },
-  getPosts,
-  getUsersBookmarks
-}) => {
+const Home = ({ location, history, post: { posts, loading }, getPosts }) => {
   useEffect(() => {
     var query = queryString.parse(location.search);
     if (query.token) {
@@ -23,17 +15,22 @@ const Home = ({
     }
 
     getPosts();
-    getUsersBookmarks();
   }, [location, history, getPosts]);
 
   return (
     <Fragment>
       <div className="container pt-3 min-vh-100">
-        <Trending />
+        {/* <Trending /> */}
 
         <div className="row mt-3">
           <div className="col-lg-8">
             {/* <PopularTopics /> */}
+            <div className="border-bottom border-gray-400 py-2 mb-4">
+              <span className="h5 font-weight-bold">Latest posts on Scobi</span>
+            </div>
+            {posts.length === 0 && (
+              <p className="my-2">There are no posts yet.</p>
+            )}
             {!loading && posts.map(post => <TopicCard post={post} />)}
           </div>
           <div className="col-lg-4 pl-5">
@@ -47,8 +44,7 @@ const Home = ({
 
 Home.propTypes = {
   post: PropTypes.object.isRequired,
-  getPosts: PropTypes.func.isRequired,
-  getUsersBookmarks: PropTypes.func.isRequired
+  getPosts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -57,4 +53,4 @@ const mapStateToProps = state => {
   return { post };
 };
 
-export default connect(mapStateToProps, { getPosts, getUsersBookmarks })(Home);
+export default connect(mapStateToProps, { getPosts })(Home);
