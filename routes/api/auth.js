@@ -167,9 +167,10 @@ router.post("/totp-generate", async (req, res, next) => {
   const token = {
     token: speakeasy.totp({
       secret: secret,
-      encoding: "base32"
-    }),
-    remaining: 180 - Math.floor((new Date().getTime() / 1000.0) % 30)
+      encoding: "base32",
+      time: 180
+    })
+    // remaining: 180 - Math.floor((new Date().getTime() / 1000.0) % 30)
   };
 
   // create reusable transporter object using the default SMTP transport
@@ -211,7 +212,8 @@ router.post("/totp-validate", async (request, response, next) => {
     secret: secret,
     encoding: "base32",
     token: token,
-    window: 0
+    time: 180
+    // window: 0
   });
 
   if (!valid) {
