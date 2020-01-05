@@ -23,7 +23,7 @@ const Followers = ({ show, onHide, title, data }) => {
             <Link
               onClick={onHide}
               className="text-decoration-none text-dark d-flex"
-              to="/profile">
+              to={`/@${user.user.username}`}>
               <img
                 className="rounded-circle fit-image"
                 src={user.user.avatar}
