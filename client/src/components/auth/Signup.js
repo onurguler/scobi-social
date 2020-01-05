@@ -118,7 +118,7 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
 
             <Form.Group>
               <p>
-                Already a Scober? <a href="#!"> LOG IN</a>
+                Already a Scober? <Link to="/login"> LOG IN</Link>
               </p>
             </Form.Group>
 
@@ -129,11 +129,19 @@ const Signup = ({ setAlert, register, isAuthenticated }) => {
             <Form.Text className="text-muted mt-4">or sign up using</Form.Text>
 
             <Button id="facebook" variant="default">
-              <FontAwesomeIcon icon={faFacebook} size="2x" />
+              <a
+                className="text-decoration-none"
+                href="http://scobi.social/api/auth/google">
+                <FontAwesomeIcon icon={faFacebook} size="2x" />
+              </a>
             </Button>
 
             <Button id="google" variant="default">
-              <FontAwesomeIcon icon={faGooglePlus} size="2x" />
+              <a
+                className="text-decoration-none text-danger"
+                href="http://scobi.social/api/auth/google">
+                <FontAwesomeIcon icon={faGooglePlus} size="2x" />
+              </a>
             </Button>
           </Form>
         </Col>
