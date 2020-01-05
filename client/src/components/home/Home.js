@@ -29,11 +29,15 @@ const Home = ({
   return (
     <Fragment>
       <div className="container pt-3 min-vh-100">
-        <Trending />
+        {/* <Trending /> */}
 
         <div className="row mt-3">
           <div className="col-lg-8">
             {/* <PopularTopics /> */}
+            <div className="border-bottom border-gray-400 py-2 mb-4">
+              <span className="h5 font-weight-bold">Categories</span>
+            </div>
+            {posts.length === 0 && <p>There are no posts yet.</p>}
             {!loading && posts.map(post => <TopicCard post={post} />)}
           </div>
           <div className="col-lg-4 pl-5">
