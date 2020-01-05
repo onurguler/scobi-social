@@ -14,7 +14,7 @@ const TwoFA = ({ auth, getToken, login_2fa }) => {
     if (auth.user) {
       getToken(auth.user.id);
     }
-  }, [getToken]);
+  }, [getToken, auth.user]);
 
   if (!auth.user && !auth.two_fa) {
     return <Redirect to="/" />;

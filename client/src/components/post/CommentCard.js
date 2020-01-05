@@ -1,21 +1,8 @@
 import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEllipsisH,
-  // eslint-disable-next-line
-  faThumbsUp as faThumbsUpSolid,
-  // eslint-disable-next-line
-  faThumbsDown as faThumbsDownSolid,
-  // eslint-disable-next-line
-  faBookmark as faBookmarkSolid,
-  faShare
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  faThumbsUp,
-  faThumbsDown,
-  faBookmark
-} from '@fortawesome/free-regular-svg-icons';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
+
 import LikesModal from '../post/LikesModal';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

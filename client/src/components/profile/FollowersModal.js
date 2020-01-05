@@ -23,7 +23,7 @@ const Followers = ({ show, onHide, title, data }) => {
             <Link
               onClick={onHide}
               className="text-decoration-none text-dark d-flex"
-              to="/profile">
+              to={`/@${user.user.username}`}>
               <img
                 className="rounded-circle fit-image"
                 src={user.user.avatar}
@@ -36,9 +36,6 @@ const Followers = ({ show, onHide, title, data }) => {
                 <small className="text-secondary">@{user.user.username}</small>
               </div>
             </Link>
-            <button type="button" class="btn btn-primary btn-sm px-4">
-              Follow
-            </button>
           </div>
         ))}
       </Modal.Body>

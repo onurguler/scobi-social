@@ -1,15 +1,15 @@
 import React, { Fragment } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import EmailSettings from '../settings/EmailSettings';
-import Connections from '../settings/Connections';
-import Account from '../settings/Account';
+// import EmailSettings from '../settings/EmailSettings';
+// import Connections from '../settings/Connections';
+// import Account from '../settings/Account';
 import Privacy from '../settings/Privacy';
 
 const Settings = () => {
   return (
     <Fragment>
-      <div className="container mt-5">
+      <div className="container mt-5 min-vh-100">
         <div className="row">
           <div className="col-3 d-none d-xl-block">
             <div className="position-fixed">
@@ -34,7 +34,7 @@ const Settings = () => {
             </div>
           </div>
           <div className="col-lg-9">
-            <section id="EmailSettings">
+            {/* <section id="EmailSettings">
               <EmailSettings />
             </section>
             <section id="Connections">
@@ -42,7 +42,7 @@ const Settings = () => {
             </section>
             <section id="Account">
               <Account />
-            </section>
+            </section> */}
             <section id="Privacy">
               <Privacy />
             </section>

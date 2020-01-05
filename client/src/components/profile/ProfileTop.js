@@ -39,7 +39,9 @@ const ProfileTop = ({ profile, user, loading, posts, follow, unfollow }) => {
                 {!loading && user && profile.user.username !== user.username ? (
                   profile.followers.length > 0 &&
                   profile.followers.filter(
-                    follower => follower.user._id || follower.user === user._id
+                    follower =>
+                      follower.user._id === user._id ||
+                      follower.user === user._id
                   ).length > 0 ? (
                     <button
                       type="button"

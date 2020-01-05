@@ -1,5 +1,4 @@
-import React, { useEffect, Fragment } from 'react';
-import PostHeader from './PostHeader';
+import React, { useEffect } from 'react';
 import PostUser from './PostUser';
 import PostContent from './PostContent';
 import { connect } from 'react-redux';
@@ -8,7 +7,7 @@ import { getPost } from '../../store/actions/post';
 const Post = ({ getPost, match, post, auth }) => {
   useEffect(() => {
     getPost(match.params.post_id);
-  }, [match]);
+  }, [match, getPost]);
   return (
     <div className="min-vh-100">
       {post.post && (
