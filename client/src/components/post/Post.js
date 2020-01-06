@@ -11,7 +11,7 @@ const Post = ({ getPost, match, post, auth }) => {
   return (
     <div className="min-vh-100">
       {post.post && (
-        <div className="flex d-flex flex-column align-items-center justify-content-center post-container">
+        <div className="mx-auto col-md-8">
           <div className="mb-4 rounded-lg px-4 py-4 bg-white post">
             <h2>{post.post && post.post.title}</h2>
             <PostUser
