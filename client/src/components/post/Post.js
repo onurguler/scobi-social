@@ -12,7 +12,7 @@ const Post = ({ getPost, match, post, auth }) => {
     <div className="min-vh-100">
       {post.post && (
         <div className="mx-auto col-md-8 col-lg-6">
-          <div className="mb-4 rounded-lg px-4 py-4 bg-white post">
+          <div className="mb-4 rounded-lg px-2 py-4 bg-white post">
             <h2>{post.post && post.post.title}</h2>
             <PostUser
               post={post.post}
