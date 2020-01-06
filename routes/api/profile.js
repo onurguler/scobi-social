@@ -94,7 +94,9 @@ router.put("/follow/:username", auth, async (req, res) => {
     await source.save();
     await target.save();
 
-    res.json({ followers: target.followers });
+    const returnData = await Profile.findOne({ user: user.id });
+
+    res.json({ followers: returnData.followers });
   } catch (err) {
     console.error(err);
     res.status(500).send("Server Error");
@@ -137,6 +139,7 @@ router.put("/unfollow/:username", auth, async (req, res) => {
 
     await source.save();
     await target.save();
+
     res.json({ followers: target.followers });
   } catch (err) {
     console.error(err);
