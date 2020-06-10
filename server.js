@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const connectDB = require("./config/db");
+const cors = require("cors");
 
 require("./config/passport");
 
@@ -10,6 +11,7 @@ connectDB();
 
 app.set("trust proxy", true);
 app.use(express.json({ extended: false }));
+app.use(cors());
 
 app.use("/api/users", require("./routes/api/users"));
 app.use("/api/auth", require("./routes/api/auth"));
