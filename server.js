@@ -20,6 +20,7 @@ app.use("/api/posts", require("./routes/api/posts"));
 app.use("/api/scobs", require("./routes/api/scobs"));
 app.use("/api/contact", require("./routes/api/contact"));
 app.use("/api/settings", require("./routes/api/settings"));
+app.use("/api/notifications", require("./routes/api/notifications"));
 
 // app.use(express.static(__dirname + "/client/public"));
 
