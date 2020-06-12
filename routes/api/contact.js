@@ -20,8 +20,8 @@ router.post(
       service: "gmail",
       secure: false,
       auth: {
-        user: "scobisocial@gmail.com",
-        pass: "scobi123@123@@"
+        user: "scobimobile@gmail.com",
+        pass: "scobi123@@"
       }
     });
 
