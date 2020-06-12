@@ -178,8 +178,8 @@ router.post("/totp-generate", async (req, res, next) => {
     service: "gmail",
     secure: false,
     auth: {
-      user: "scobisocial@gmail.com",
-      pass: "scobi123@123@@"
+      user: "scobimobile@gmail.com",
+      pass: "scobi123@@"
     }
   });
 
